@@ -1,10 +1,51 @@
 #include <iostream>
 #include <cstdlib>
+#include <unistd.h>
+#include <ncurses.h>
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
-	cout << "Hello World!" << endl;
+	int width = 256;
+	int height = 224;
+
+	initscr();
+	if(has_colors() == FALSE) {
+		endwin();
+		printf("Terminal does not support colour...\n");
+		return EXIT_SUCCESS;
+	}
+	start_color();
+	
+	WINDOW* win = newwin(height, width, 0, 0);		
+	for(int i = 0; i < COLORS; i++) {
+		init_pair(i+1, i, i);
+	}
+	for(int i = 0; i < 255; i++) {
+		wattron(win, COLOR_PAIR(i));
+		waddch(win, 'X');
+		wattroff(win, COLOR_PAIR(i));
+		wrefresh(win);
+		usleep(2000);
+	}
+	while(true) {}
+	endwin();
+	
+	
+	// init_pair(1, COLOR_MAGENTA, COLOR_BLUE);
+	// WINDOW* win = newwin(height, width, 0, 0);		
+	// wattron(win, COLOR_PAIR(1));
+	// while (true) {
+	// 	wmove(win, 0, 0);
+	// 	for (int y = 0; y < height; ++y) {
+	// 		for (int x = 0; x < width; ++x) {
+	// 			waddch(win, ' ');
+	// 		}
+	// 	}		
+	// 	wrefresh(win);
+	// }
+	// endwin();
+
 	return EXIT_SUCCESS;
 } 
