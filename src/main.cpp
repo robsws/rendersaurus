@@ -27,25 +27,9 @@ int main(int argc, char **argv)
 		waddch(win, 'X');
 		wattroff(win, COLOR_PAIR(i));
 		wrefresh(win);
-		usleep(2000);
 	}
 	while(true) {}
 	endwin();
-	
-	
-	// init_pair(1, COLOR_MAGENTA, COLOR_BLUE);
-	// WINDOW* win = newwin(height, width, 0, 0);		
-	// wattron(win, COLOR_PAIR(1));
-	// while (true) {
-	// 	wmove(win, 0, 0);
-	// 	for (int y = 0; y < height; ++y) {
-	// 		for (int x = 0; x < width; ++x) {
-	// 			waddch(win, ' ');
-	// 		}
-	// 	}		
-	// 	wrefresh(win);
-	// }
-	// endwin();
 
 	return EXIT_SUCCESS;
 } 
