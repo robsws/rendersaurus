@@ -1,35 +1,26 @@
+#include "../include/xterm_display.h"
+
 #include <iostream>
-#include <cstdlib>
-#include <unistd.h>
-#include <ncurses.h>
+#include <stdlib.h>
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
-	int width = 256;
-	int height = 224;
-
-	initscr();
-	if(has_colors() == FALSE) {
-		endwin();
-		printf("Terminal does not support colour...\n");
-		return EXIT_SUCCESS;
+	if(argc != 3) {
+		cout << "Usage: " << argv[0] << " <width> <height>" << endl;
+		return EXIT_FAILURE;
 	}
-	start_color();
 	
-	WINDOW* win = newwin(height, width, 0, 0);		
-	for(int i = 0; i < COLORS; i++) {
-		init_pair(i+1, i, i);
+	int width = atoi(argv[1]);
+	int height = atoi(argv[2]);
+
+	XtermDisplay* display = new XtermDisplay(width, height);
+	display->initialise();
+	for(int i = 0; i < 5000; ++i) {
+		display->refresh();
 	}
-	for(int i = 0; i < 255; i++) {
-		wattron(win, COLOR_PAIR(i));
-		waddch(win, 'X');
-		wattroff(win, COLOR_PAIR(i));
-		wrefresh(win);
-	}
-	while(true) {}
-	endwin();
+	display->finish();
 
 	return EXIT_SUCCESS;
 } 
