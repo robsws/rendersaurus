@@ -1,4 +1,4 @@
-#include "../include/xterm_display.h"
+#include "xterm_display.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -15,12 +15,20 @@ int main(int argc, char **argv)
 	int width = atoi(argv[1]);
 	int height = atoi(argv[2]);
 
-	XtermDisplay* display = new XtermDisplay(width, height);
+	FragmentBuffer* fragmentBuffer = new FragmentBuffer(width, height);
+	XtermDisplay* display = new XtermDisplay(width, height, fragmentBuffer);
 	display->initialise();
-	for(int i = 0; i < 5000; ++i) {
+	for(int i = 0; i < 256; ++i) {
+		for (int x = 0; x < width; ++x) {
+			for (int y = 0; y < height; ++y) {
+				Fragment fragment = Fragment(0, (y+i)%256, 0);
+				fragmentBuffer->set(x, y, fragment);
+			}
+		}
 		display->refresh();
 	}
 	display->finish();
-
+	
+	delete fragmentBuffer;
 	return EXIT_SUCCESS;
 } 

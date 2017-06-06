@@ -1,7 +1,7 @@
 COMPILER = g++
-OBJECTS = main.o xterm_display.o fragment_buffer.o
+OBJECTS = main.o xterm_display.o fragment_buffer.o colour.o fragment.o
 DEBUG = -g
-COMPILER_FLAGS = -Wall -I/usr/include/ -c $(DEBUG)
+COMPILER_FLAGS = -Wall -I/usr/include/ -I../include/ -c $(DEBUG)
 LINKER_FLAGS = -Wall $(DEBUG)
 
 demo: $(OBJECTS) 
@@ -15,6 +15,12 @@ xterm_display.o: ../src/xterm_display.cpp
 
 fragment_buffer.o: ../src/fragment_buffer.cpp
 	$(COMPILER) $(COMPILER_FLAGS) ../src/fragment_buffer.cpp
+
+colour.o: ../src/colour.cpp
+	$(COMPILER) $(COMPILER_FLAGS) ../src/colour.cpp	
+
+fragment.o: ../src/fragment.cpp
+	$(COMPILER) $(COMPILER_FLAGS) ../src/fragment.cpp	
 
 clean:
 	rm -f $(OBJECTS) demo
