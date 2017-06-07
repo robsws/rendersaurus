@@ -18,10 +18,10 @@ int main(int argc, char **argv)
 	FragmentBuffer* fragmentBuffer = new FragmentBuffer(width, height);
 	XtermDisplay* display = new XtermDisplay(width, height, fragmentBuffer);
 	display->initialise();
-	for(int i = 0; i < 256; ++i) {
+	for(int i = 0; i < 2000; ++i) {
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
-				Fragment fragment = Fragment(0, (y+i)%256, 0);
+				Fragment fragment = Fragment((y+i)%256, (y+i)%256, (y+i)%256);
 				fragmentBuffer->set(x, y, fragment);
 			}
 		}

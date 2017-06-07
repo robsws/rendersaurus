@@ -49,7 +49,7 @@ int convertRGBto256(const Colour& colour) {
     int redIndex = getColourIndex(colour.red());
     int greenIndex = getColourIndex(colour.green());
     int blueIndex = getColourIndex(colour.blue());
-    return 16 + redIndex*36 + greenIndex*6 + blueIndex;
+    return 17 + redIndex*36 + greenIndex*6 + blueIndex;
 }
 
 bool XtermDisplay::refresh() {
