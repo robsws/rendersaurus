@@ -54,8 +54,8 @@ int convertRGBto256(const Colour& colour) {
 
 bool XtermDisplay::refresh() {
     wmove(_ncurses_window,0,0);
-    for(int x = 0; x < _width; ++x) {
-        for(int y = 0; y < _height; ++y) {
+    for(int y = 0; y < _height; ++y) {
+        for(int x = 0; x < _width; ++x) {
             Fragment fragment = _fragmentBuffer->get(x, y);
             // Convert RGB colour to xterm 256 index
             int colour = convertRGBto256(fragment);
