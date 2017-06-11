@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	for(int i = 0; i < 2000; ++i) {
 		for (int x = 0; x < width; ++x) {
 			for (int y = 0; y < height; ++y) {
-				Fragment fragment = Fragment((y+i)%256, 0, (y+i)%256);
+				Fragment fragment = Fragment((y+i)%256, 0, (x+i)%256);
 				fragmentBuffer->set(x, y, fragment);
 			}
 		}

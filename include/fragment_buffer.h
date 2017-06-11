@@ -14,7 +14,7 @@ class FragmentBuffer {
         void set(int x, int y, const Fragment& fragment);
     private:
         // Buffer stores columns contiguously
-        vector< vector<Fragment> > _buffer;
-        int _width;
-        int _height;
+        vector< vector<Fragment> > buffer;
+        int width;
+        int height;
 };

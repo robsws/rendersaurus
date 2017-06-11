@@ -4,5 +4,5 @@
 
 class Fragment : public Colour {
     public:
-        Fragment(float r, float g, float b);
+        Fragment(float red, float green, float blue);
 };

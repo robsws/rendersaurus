@@ -15,7 +15,7 @@ bool XtermDisplay::initialise() {
 		return false;
 	}
 	start_color();
-	_ncurses_window = newwin(_height, _width, 0, 0);	
+	ncursesWindow = newwin(height, width, 0, 0);	
     // Initialise all 256 colors.
     // Pairs are initialised with both background and foreground as the same colour.
 	for(int i = 0; i < COLORS; i++) {
@@ -45,26 +45,26 @@ int getColourIndex(float colourComponent) {
     }
 }
 
-int convertRGBto256(const Colour& colour) {
-    int redIndex = getColourIndex(colour.red());
-    int greenIndex = getColourIndex(colour.green());
-    int blueIndex = getColourIndex(colour.blue());
+int convertRgbTo256(const Colour& colour) {
+    int redIndex = getColourIndex(colour.red);
+    int greenIndex = getColourIndex(colour.green);
+    int blueIndex = getColourIndex(colour.blue);
     return 17 + redIndex*36 + greenIndex*6 + blueIndex;
 }
 
 bool XtermDisplay::refresh() {
-    wmove(_ncurses_window,0,0);
-    for(int y = 0; y < _height; ++y) {
-        for(int x = 0; x < _width; ++x) {
-            Fragment fragment = _fragmentBuffer->get(x, y);
+    wmove(ncursesWindow,0,0);
+    for(int y = 0; y < height; ++y) {
+        for(int x = 0; x < width; ++x) {
+            Fragment fragment = fragmentBuffer->get(x, y);
             // Convert RGB colour to xterm 256 index
-            int colour = convertRGBto256(fragment);
-            wattron(_ncurses_window, COLOR_PAIR(colour));
-            waddch(_ncurses_window, 'X');
-            wattroff(_ncurses_window, COLOR_PAIR(colour));
+            int colour = convertRgbTo256(fragment);
+            wattron(ncursesWindow, COLOR_PAIR(colour));
+            waddch(ncursesWindow, 'X');
+            wattroff(ncursesWindow, COLOR_PAIR(colour));
         }
 	}
-    wrefresh(_ncurses_window);
+    wrefresh(ncursesWindow);
     return true;
 }
 

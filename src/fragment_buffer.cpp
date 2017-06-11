@@ -5,14 +5,14 @@
 using namespace std;
 
 FragmentBuffer::FragmentBuffer(int width, int height) :
-    _width(width), _height(height) {
-    _buffer = vector< vector<Fragment> >();
+    width(width), height(height) {
+    buffer = vector< vector<Fragment> >();
     for (int x = 0; x < width; ++x) {
         vector<Fragment> column = vector<Fragment>();
         for (int y = 0; y < height; ++y) {
             column.push_back(Fragment(0,0,0));
         }
-        _buffer.push_back(column);
+        buffer.push_back(column);
     }
     
 }
@@ -27,16 +27,16 @@ float clamp(float value, float lower, float upper) {
 
 Fragment& FragmentBuffer::get(int x, int y) {
     // Clamp x and y to buffer size.
-    x = clamp(x, 0, _width);
-    y = clamp(y, 0, _height);
+    x = clamp(x, 0, width);
+    y = clamp(y, 0, height);
     // Fetch the colour from the buffer.
-    return _buffer[x][y];
+    return buffer[x][y];
 }
 
 void FragmentBuffer::set(int x, int y, const Fragment& fragment) {
     // Clamp x and y to buffer size.
-    x = clamp(x, 0, _width);
-    y = clamp(y, 0, _height);
+    x = clamp(x, 0, width);
+    y = clamp(y, 0, height);
     // Fetch colour
     Fragment& bufferFragment = this->get(x, y);
     // Set rgb values
