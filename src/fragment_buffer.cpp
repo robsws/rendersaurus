@@ -25,7 +25,7 @@ float clamp(float value, float lower, float upper) {
     return max(lower, min(value, upper));
 }
 
-Fragment& FragmentBuffer::get(int x, int y) {
+Fragment FragmentBuffer::get(int x, int y) const {
     // Clamp x and y to buffer size.
     x = clamp(x, 0, width);
     y = clamp(y, 0, height);
@@ -37,8 +37,6 @@ void FragmentBuffer::set(int x, int y, const Fragment& fragment) {
     // Clamp x and y to buffer size.
     x = clamp(x, 0, width);
     y = clamp(y, 0, height);
-    // Fetch colour
-    Fragment& bufferFragment = this->get(x, y);
     // Set rgb values
-    bufferFragment.set(fragment);
+    buffer[x][y].set(fragment);
 }

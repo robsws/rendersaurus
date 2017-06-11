@@ -10,7 +10,7 @@ class FragmentBuffer {
     public:
         FragmentBuffer(int width, int height);
         ~FragmentBuffer();
-        Fragment& get(int x, int y);
+        Fragment get(int x, int y) const;
         void set(int x, int y, const Fragment& fragment);
     private:
         // Buffer stores columns contiguously
