@@ -1,6 +1,8 @@
 #pragma once
 
+#include "vector.h"
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -30,11 +32,32 @@ class SquareMatrix {
         SquareMatrix operator*(const SquareMatrix& m) const;
         // Matrix transpose
         SquareMatrix transpose() const;
-        // Matrix inverse
-        SquareMatrix inverse() const;
         // Matrix determinant
         float determinant() const;
+        // Matrix inverse
+        SquareMatrix inverse() const;
+        // Get number of dimensions of matrix
+        int dimensions() const;
+        // Get a column as vector
+        Vector column(int index) const;
+        // Get a row as vector
+        Vector row(int index) const;
+        // Element access
+        float& operator()(int row, int column);
+        float operator()(int row, int column) const;
     private:
+        // Apply an operation to every element of the matrix
         SquareMatrix applyComponentWiseOperation(auto operation) const;
+        // Return the matrix given by removing row i and column j
+        SquareMatrix subMatrix(int i, int j) const;
+        // Calculate the determinant recursively without using the cofactor matrix
+        float pureDeterminant() const;
+        // Compute the matrix of cofactors for this matrix
+        void computeCofactorMatrix() const;
+        // Actual elements of the matrix
         vector< vector<float> > values;
-}
+        // Cofactor matrix
+        mutable unique_ptr<SquareMatrix> cofactors = NULL;
+        // Judge whether cofactors need to be recalculated
+        mutable bool cofactorsAreStale = true;
+};

@@ -1,7 +1,7 @@
 COMPILER = g++
-OBJECTS = main.o xterm_display.o fragment_buffer.o colour.o fragment.o
+OBJECTS = main.o xterm_display.o fragment_buffer.o colour.o fragment.o vector.o square_matrix.o
 DEBUG = -g
-COMPILER_FLAGS = -Wall -I/usr/include/ -I../include/ -c $(DEBUG)
+COMPILER_FLAGS = -Wall -std=c++14 -I/usr/include/ -I../include/ -c $(DEBUG)
 LINKER_FLAGS = -Wall $(DEBUG)
 
 demo: $(OBJECTS) 
@@ -21,6 +21,12 @@ colour.o: ../src/colour.cpp
 
 fragment.o: ../src/fragment.cpp
 	$(COMPILER) $(COMPILER_FLAGS) ../src/fragment.cpp	
+
+vector.o: ../src/vector.cpp
+	$(COMPILER) $(COMPILER_FLAGS) ../src/vector.cpp
+
+square_matrix.o: ../src/square_matrix.cpp
+	$(COMPILER) $(COMPILER_FLAGS) ../src/square_matrix.cpp
 
 clean:
 	rm -f $(OBJECTS) demo

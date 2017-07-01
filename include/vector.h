@@ -4,6 +4,8 @@
 
 using namespace std;
 
+class SquareMatrix;
+
 class Vector {
     public:
         // Construct empty vector
@@ -13,31 +15,30 @@ class Vector {
         // Construct vector with given values
         Vector(vector<float> values);
         // Copy constructor
-        Vector(const Vector& vector);
+        Vector(const Vector& v);
         // Vector negation
         Vector operator-() const;
         // Vector addition
-        Vector operator+(const Vector& vector) const;
+        Vector operator+(const Vector& v) const;
         // Vector subtraction
-        Vector operator-(const Vector& vector) const;
+        Vector operator-(const Vector& v) const;
         // Multiplication by scalar
         Vector operator*(float scalar) const;
         // Division by scalar
         Vector operator/(float scalar) const;
         // Multiplication by matrix
-        // Vector operator*(const Matrix& matrix);
+        Vector operator*(const SquareMatrix& matrix);
         // Dot product
         static float dot(const Vector& a, const Vector& b);
         // Cross product
-        // static Vector cross(const Vector& a, const Vector& b);
+        static Vector cross(const Vector& a, const Vector& b);
         // Magnitude
         float magnitude() const;
         // Get number of dimensions of vector
-        unsigned int dimensions() const;
-        // Getter
-        float operator[](int index) const;
-        // Setter
-        void set(int index, float value);
+        int dimensions() const;
+        // Element access
+        float& operator[](unsigned int index);
+        float operator[](unsigned int index) const;
     private:
         Vector applyComponentWiseOperation(auto operation) const;
         vector<float> values;

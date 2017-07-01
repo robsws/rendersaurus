@@ -26,11 +26,11 @@ Vector::Vector(const Vector& v) {
 }
 
 Vector Vector::applyComponentWiseOperation(auto operation) const {
-    Vector result = Vector(*this);
+    Vector v = Vector(*this);
     for (unsigned int i = 0; i < values.size(); ++i) {
-        result.set(i, operation(i));
+        v[i] = operation(i);
     }
-    return result;
+    return v;
 }
 
 Vector Vector::operator-() const { 
@@ -84,17 +84,19 @@ float Vector::magnitude() const {
     return sqrt(sumOfSquares);
 }
 
-unsigned int Vector::dimensions() const {
+int Vector::dimensions() const {
     // Get number of dimensions of vector
-    return values.size();
+    return (int)values.size();
 }
 
-float Vector::operator[](int index) const {
-    // Getter
+float& Vector::operator[](unsigned int index) {
+    // Element access
+    assert(index < values.size());
     return values[index];
 }
 
-void Vector::set(int index, float value) {
-    // Setter
-    values[index] = value;
+float Vector::operator[](unsigned int index) const {
+    // Element access
+    assert(index < values.size());
+    return values[index];
 }
