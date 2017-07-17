@@ -20,7 +20,7 @@ Vector::Vector(vector<float> values) {
 
 Vector::Vector(const Vector& v) {
     values = vector<float>(v.dimensions(), 0);
-    for (unsigned int i = 0; i < v.dimensions(); ++i) {
+    for (int i = 0; i < v.dimensions(); ++i) {
         values[i] = v[i];
     }
 }
@@ -39,13 +39,13 @@ Vector Vector::operator-() const {
 }
 
 Vector Vector::operator+(const Vector& v) const {
-    assert(values.size() == v.dimensions());
+    assert((int)values.size() == v.dimensions());
     auto add = [&] (int i) {return values[i] + v[i];};
     return applyComponentWiseOperation(add);
 }
 
 Vector Vector::operator-(const Vector& v) const {
-    assert(values.size() == v.dimensions());
+    assert((int)values.size() == v.dimensions());
     auto subtract = [&] (int i) {return values[i] - v[i];};
     return applyComponentWiseOperation(subtract);
 }
@@ -63,7 +63,7 @@ Vector Vector::operator/(float scalar) const {
 float Vector::dot(const Vector& a, const Vector& b) {
     assert(a.dimensions() == b.dimensions());
     float result = 0;
-    for (unsigned int i = 0; i < a.dimensions(); ++i) {
+    for (int i = 0; i < a.dimensions(); ++i) {
         result += a[i] * b[i];
     }
     return result;
