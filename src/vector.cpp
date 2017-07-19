@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <cmath>
+// #include <iostream>
 
 Vector::Vector() {
     // Construct empty vector
@@ -15,7 +16,7 @@ Vector::Vector(int size) {
 
 Vector::Vector(vector<float> values) {
     // Construct vector with given values
-    values = vector<float>(values);
+    this->values = vector<float>(values);
 }
 
 Vector::Vector(const Vector& v) {
@@ -99,4 +100,9 @@ float Vector::operator[](unsigned int index) const {
     // Element access
     assert(index < values.size());
     return values[index];
+}
+
+// Associativity for multiplying by scalar
+Vector operator*(float f, const Vector& v) {
+    return v*f;
 }

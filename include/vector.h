@@ -43,3 +43,6 @@ class Vector {
         Vector applyComponentWiseOperation(auto operation) const;
         vector<float> values;
 };
+
+// Associativity for multiplying by scalar
+Vector operator*(float f, const Vector& v);
