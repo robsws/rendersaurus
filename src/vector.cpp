@@ -26,6 +26,17 @@ Vector::Vector(const Vector& v) {
     }
 }
 
+Vector Vector::operator==(const Vector& v) const {
+    if(dimensions() != v.dimensions()) {
+        return false;
+    }
+    bool equal = true;
+    for(unsigned int i = 0; i < values.size(); ++i) {
+        equal = equal && values[i] == v[i];
+    }
+    return equal;
+}
+
 Vector Vector::applyComponentWiseOperation(auto operation) const {
     Vector v = Vector(*this);
     for (unsigned int i = 0; i < values.size(); ++i) {
@@ -102,7 +113,7 @@ float Vector::operator[](unsigned int index) const {
     return values[index];
 }
 
-// Associativity for multiplying by scalar
+// Commutativity for multiplying by scalar
 Vector operator*(float f, const Vector& v) {
     return v*f;
 }

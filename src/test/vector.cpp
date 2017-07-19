@@ -13,9 +13,9 @@ SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
             Vector Vs = V*s;
 
             THEN("Vs = [sV1, sV2, sV3, ... ]") {
-                REQUIRE(Vs[0] == 13.964929f);
-                REQUIRE(Vs[1] == 24.104162f);
-                REQUIRE(Vs[2] == 17.636914f);
+                REQUIRE(Vs[0] == Approx(13.964929f));
+                REQUIRE(Vs[1] == Approx(24.104162f));
+                REQUIRE(Vs[2] == Approx(17.636914f));
             }
         }
 
@@ -23,9 +23,9 @@ SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
             Vector sV = s*V;
 
             THEN("sV = [sV1, sV2, sV3, ... ]") {
-                REQUIRE(sV[0] == 13.964929f);
-                REQUIRE(sV[1] == 24.104162f);
-                REQUIRE(sV[2] == 17.636914f);
+                REQUIRE(sV[0] == Approx(13.964929f));
+                REQUIRE(sV[1] == Approx(24.104162f));
+                REQUIRE(sV[2] == Approx(17.636914f));
             }
         }
     }
@@ -52,6 +52,27 @@ SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
                 REQUIRE(sZ[0] == 0.0f);
                 REQUIRE(sZ[1] == 0.0f);
                 REQUIRE(sZ[2] == 0.0f);
+            }
+        }
+    }
+}
+
+SCENARIO("Scalar-vector multiplication is associative", "[vector]") {
+
+    GIVEN("A vector V and two scalars {s,t}") {
+        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        Vector V(ordinary_values);
+        float s = 38.343f;
+        float t = 95.342f;
+
+        WHEN("(st)V") {
+            Vector st_V = (s*t)*V;
+
+            THEN("(st)V = s(tV)") {
+                Vector s_tV = s*(t*V);
+                REQUIRE(st_V[0] == Approx(s_tV[0]));
+                REQUIRE(st_V[1] == Approx(s_tV[1]));
+                REQUIRE(st_V[2] == Approx(s_tV[2]));
             }
         }
     }
@@ -91,7 +112,87 @@ SCENARIO("Vectors can be negated", "[vector]") {
         }
     }
 }
-/*
+
 SCENARIO("Vectors can be added and subtracted from each other", "[vector]") {
 
-}*/
+    GIVEN("Two vectors {V, W}") {
+        vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+        Vector V(ordinary_values1);
+        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        Vector W(ordinary_values2);
+
+        WHEN("V + W") {
+            Vector VW = V + W;
+
+            THEN("V + W = [V1+W1, V2+W2, V3+W3, ... ]") {
+                REQUIRE(VW[0] == Approx(37.777f));
+                REQUIRE(VW[1] == Approx(7.156f));
+                REQUIRE(VW[2] == Approx(85.927f));
+            }
+        }
+
+        WHEN("V - W") {
+            Vector VW = V - W;
+
+            THEN("V - W = [V1-W1, V2-W2, V3-W3, ... ]") {
+                REQUIRE(VW[0] == Approx(-32.871f));
+                REQUIRE(VW[1] == Approx(1.312f));
+                REQUIRE(VW[2] == Approx(-79.731f));
+            }
+        }
+    }
+}
+
+SCENARIO("Vector addition is commutative", "[vector]") {
+
+    GIVEN("Two vectors {V, W}") {
+        vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+        Vector V(ordinary_values1);
+        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        Vector W(ordinary_values2);
+
+        WHEN("V + W") {
+            Vector VW = V + W;
+
+            THEN("V + W = W + V") {
+                Vector WV = W + V;
+                REQUIRE(VW[0] == Approx(WV[0]));
+                REQUIRE(VW[1] == Approx(WV[1]));
+                REQUIRE(VW[2] == Approx(WV[2]));
+            }
+        }
+    }
+}
+
+SCENARIO("Scalar-vector multiplication is distributive across addition and subtraction", "[vector]") {
+
+    GIVEN("Two vectors {V,W} and a scalar s") {
+        vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+        Vector V(ordinary_values1);
+        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        Vector W(ordinary_values2);
+        float s = 38.343f;
+
+        WHEN("s(V + W)") {
+            Vector s_VW = s * (V + W);
+
+            THEN("s(V + W) = sV + sW") {
+                Vector sV_sW = s * V + s * W;
+                REQUIRE(s_VW[0] == Approx(sV_sW[0]));
+                REQUIRE(s_VW[1] == Approx(sV_sW[1]));
+                REQUIRE(s_VW[2] == Approx(sV_sW[2]));
+            }
+        }
+
+        WHEN("s(V - W)") {
+            Vector s_VW = s * (V - W);
+
+            THEN("s(V - W) = sV - sW") {
+                Vector sV_sW = s * V - s * W;
+                REQUIRE(s_VW[0] == Approx(sV_sW[0]));
+                REQUIRE(s_VW[1] == Approx(sV_sW[1]));
+                REQUIRE(s_VW[2] == Approx(sV_sW[2]));
+            }
+        }
+    }
+}

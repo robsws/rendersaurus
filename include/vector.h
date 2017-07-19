@@ -16,6 +16,8 @@ class Vector {
         Vector(vector<float> values);
         // Copy constructor
         Vector(const Vector& v);
+        // Vector equality
+        Vector operator==(const Vector& v) const;
         // Vector negation
         Vector operator-() const;
         // Vector addition
@@ -44,5 +46,5 @@ class Vector {
         vector<float> values;
 };
 
-// Associativity for multiplying by scalar
+// Commutativity for multiplying by scalar
 Vector operator*(float f, const Vector& v);
