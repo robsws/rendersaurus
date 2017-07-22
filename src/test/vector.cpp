@@ -1,5 +1,6 @@
 #include "vector.h"
 #include "catch.hpp"
+#include <math.h>
 
 SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
     float s = 5.693f;    
@@ -105,9 +106,9 @@ SCENARIO("Vectors can be negated", "[vector]") {
             Vector minusZ = -Z;
 
             THEN("-Z = Z") {
-                REQUIRE(minusZ[0] == -0.0f);
-                REQUIRE(minusZ[1] == -0.0f);
-                REQUIRE(minusZ[2] == -0.0f);
+                REQUIRE(minusZ[0] == 0.0f);
+                REQUIRE(minusZ[1] == 0.0f);
+                REQUIRE(minusZ[2] == 0.0f);
             }
         }
     }
@@ -192,6 +193,103 @@ SCENARIO("Scalar-vector multiplication is distributive across addition and subtr
                 REQUIRE(s_VW[0] == Approx(sV_sW[0]));
                 REQUIRE(s_VW[1] == Approx(sV_sW[1]));
                 REQUIRE(s_VW[2] == Approx(sV_sW[2]));
+            }
+        }
+    }
+}
+
+SCENARIO("Vector magnitude (length) can be calculated", "[vector]") {
+    GIVEN("A standard vector V of float values") {
+        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        Vector V(ordinary_values);
+
+        WHEN("Magnitude m of V is calculated") {
+            float m = V.magnitude();
+
+            THEN("Magnitude is correctly calculated") {
+                REQUIRE(m == Approx(5.79150835275f));
+            }
+        }
+    }
+
+    GIVEN("A zero vector Z") {
+        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        Vector Z(zero_values);
+        REQUIRE(Z.dimensions() == 3);
+
+        WHEN("Magnitude m of Z is calculated") {
+            float m = Z.magnitude();
+
+            THEN("m = 0") {
+                REQUIRE(m == 0.0f);
+            }
+        }
+    }
+}
+
+SCENARIO("A vector can be normalised to have unit length 1", "[vector]") {
+    GIVEN("A standard vector V of float values") {
+        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        Vector V(ordinary_values);
+
+        WHEN("V is normalised") {
+            Vector V1 = V.normalise();
+
+            THEN("Vector is correctly normalised") {
+                REQUIRE(V1[0] == Approx(0.423551f));
+                REQUIRE(V1[1] == Approx(0.73107f));
+                REQUIRE(V1[2] == Approx(0.534921f));
+            }
+        }
+    }
+
+    GIVEN("A zero vector Z") {
+        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        Vector Z(zero_values);
+
+        WHEN("Z is normalised") {
+            Vector Z1 = Z.normalise();
+
+            THEN("Vector components are NaN (division by zero)") {               
+                REQUIRE(isnan(Z1[0]));
+                REQUIRE(isnan(Z1[1]));
+                REQUIRE(isnan(Z1[2]));
+            }
+        }
+    }
+}
+
+SCENARIO("Dot product can be calculated between a vector V and another vector", "[vector]") {
+    vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+    Vector V(ordinary_values1);
+
+    GIVEN("Another vector W") {
+        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        Vector W(ordinary_values2);
+
+        WHEN("The dot product of V with W is taken") {
+            float VW = Vector::dot(V, W);
+
+            THEN("The dot product is calculated correctly") {
+                REQUIRE(VW == Approx(355.625762f));
+            }
+
+            THEN("The result is the same as W dot V") {
+                float WV = Vector::dot(W, V);
+                REQUIRE(VW == Approx(WV));
+            }
+        }
+    }
+
+    GIVEN("A zero vector Z") {
+        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        Vector Z(zero_values);
+
+        WHEN("The dot product of V with Z is taken") {
+            float VZ = Vector::dot(V, Z);
+
+            THEN("The result is zero") {
+                REQUIRE(VZ == 0.0f);
             }
         }
     }

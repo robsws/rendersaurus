@@ -2,7 +2,7 @@
 
 #include <assert.h>
 #include <cmath>
-// #include <iostream>
+#include <iostream>
 
 Vector::Vector() {
     // Construct empty vector
@@ -70,6 +70,10 @@ Vector Vector::operator*(float scalar) const {
 Vector Vector::operator/(float scalar) const {
     auto divide = [&] (int i) {return values[i] / scalar;};
     return applyComponentWiseOperation(divide);
+}
+
+Vector Vector::normalise() {
+    return (*this)/magnitude();
 }
 
 float Vector::dot(const Vector& a, const Vector& b) {

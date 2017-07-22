@@ -30,6 +30,8 @@ class Vector {
         Vector operator/(float scalar) const;
         // Multiplication by matrix
         Vector operator*(const SquareMatrix& matrix);
+        // Normalise vector
+        Vector normalise();
         // Dot product
         static float dot(const Vector& a, const Vector& b);
         // Cross product
