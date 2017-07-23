@@ -285,6 +285,24 @@ SCENARIO("A square matrix can be inverted","[square_matrix]") {
                 REQUIRE(invM(2,2) == Approx(0.00459965f));
             }
         }
+
+        WHEN("M is inverted, a value is changed and then it is inverted again") {
+            SquareMatrix invM = M.inverse();
+            M(1,1) = 30.0f;
+            invM = M.inverse();
+
+            THEN("M is correctly inverted") {
+                REQUIRE(invM(0,0) == Approx(0.450962f));
+                REQUIRE(invM(0,1) == Approx(-0.0362734f));
+                REQUIRE(invM(0,2) == Approx(-0.0413432f));
+                REQUIRE(invM(1,0) == Approx(-0.02604f));
+                REQUIRE(invM(1,1) == Approx(0.0375684f));
+                REQUIRE(invM(1,2) == Approx(-0.000380571f));
+                REQUIRE(invM(2,0) == Approx(-0.011549f));
+                REQUIRE(invM(2,1) == Approx(-0.00182243f));
+                REQUIRE(invM(2,2) == Approx(0.0046166f));
+            }           
+        }
     }
 }
 
@@ -302,6 +320,16 @@ SCENARIO("A square matrix has a determinant","[square_matrix]") {
 
             THEN("The determinant is correctly calculated") {
                 REQUIRE(det == Approx(228241.219932f));
+            }
+        }
+
+        WHEN("The determinant of M is calculated, M is modified and then the determinant is recalculated") {
+            float det = M.determinant();
+            M(1,1) = 0.0f;
+            det = M.determinant();
+
+            THEN("The determinant is correctly calculated") {
+                REQUIRE(det == Approx(-2375.610148f));
             }
         }
     }
