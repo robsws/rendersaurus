@@ -293,4 +293,49 @@ SCENARIO("Dot product can be calculated between a vector V and another vector", 
             }
         }
     }
+
+    GIVEN("An identical vector") {
+
+        WHEN("The dot product of V with V is taken") {
+            float VV = Vector::dot(V, V);
+
+            THEN("The result is the magnitude of V squared") {
+                REQUIRE(VV == Approx(33.541569f));
+            }
+        }
+    }
+}
+
+SCENARIO("Cross product can be calculated between a vector V and another vector", "[vector]") {
+    vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+    Vector V(ordinary_values1);
+    
+    GIVEN("Another vector W") {
+        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        Vector W(ordinary_values2);
+
+        WHEN("The cross product of V with W is taken") {
+            Vector VW = Vector::cross(V, W);
+
+            THEN("The cross product is calculated correctly") {
+                REQUIRE(VW[0] == Approx(341.646f));
+                REQUIRE(VW[1] == Approx(-93.7458f));
+                REQUIRE(VW[2] == Approx(-142.394f));
+            }
+
+        }
+    }
+
+    GIVEN("An identical vector") {
+
+        WHEN("The cross product of V with V is taken") {
+            Vector VV = Vector::cross(V, V);
+
+            THEN("The result is the zero vector") {
+                REQUIRE(VV[0] == 0.0f);
+                REQUIRE(VV[1] == 0.0f);
+                REQUIRE(VV[2] == 0.0f);
+            }
+        }
+    }
 }

@@ -1,19 +1,19 @@
 #include "square_matrix.h"
-
 #include "vector.h"
 #include <assert.h>
 #include <cmath>
+#include <iostream>
 
 SquareMatrix::SquareMatrix() {
     // Construct an empty matrix
     values = vector< vector<float> >();
 }
 
-SquareMatrix::SquareMatrix(int size) : SquareMatrix() {
+SquareMatrix::SquareMatrix(int width) : SquareMatrix() {
     // Construct a matrix with given values
-    for (int r = 0; r < size; ++r) {
+    for (int r = 0; r < width; ++r) {
         vector<float> row = vector<float>();
-        for (int c = 0; c < size; ++c) {
+        for (int c = 0; c < width; ++c) {
             row.push_back(0.0f);
         }
         values.push_back(row);
@@ -21,14 +21,24 @@ SquareMatrix::SquareMatrix(int size) : SquareMatrix() {
 }
 
 SquareMatrix::SquareMatrix(vector< vector<float> > values) {
-    // Construct a matrix with given values
+    // Construct a matrix with given 2D vector
     this->values = values;
 }
 
-SquareMatrix SquareMatrix::identity(int size) {
+SquareMatrix::SquareMatrix(int width, vector<float> values) {
+    // Construct a matrix of given size populated with given values
+    assert(sqrt(values.size()) == width);
+    vector< vector<float> > splitValues;
+    for(int i = 0; i < width; ++i) {
+        splitValues.push_back(vector<float>(values.begin() + i*width, values.begin() + (i+1)*width));
+    }
+    this->values = splitValues;
+}
+
+SquareMatrix SquareMatrix::identity(int width) {
     // Construct the identity matrix of given size
-    SquareMatrix m = SquareMatrix(size);
-    for (int i = 0; i < size; ++i) {
+    SquareMatrix m = SquareMatrix(width);
+    for (int i = 0; i < width; ++i) {
         m(i,i) = 1;
     }
     return m;
@@ -92,6 +102,16 @@ SquareMatrix SquareMatrix::operator*(const SquareMatrix& m) const {
     return applyComponentWiseOperation(multiply);
 }
 
+Vector SquareMatrix::operator*(const Vector& v) const {
+    // Multiplication by vector
+    assert(dimensions() == v.dimensions());
+    Vector product = Vector(v);
+    for(int i = 0; i < v.dimensions(); ++i) {
+        product[i] = Vector::dot(this->row(i), v);
+    }
+    return product;
+}
+
 SquareMatrix SquareMatrix::transpose() const {
     // Matrix transpose
     auto transpose = [&] (int i, int j) {return values[j][i];};
@@ -118,7 +138,6 @@ SquareMatrix SquareMatrix::subMatrix(int i, int j) const {
 
 float SquareMatrix::pureDeterminant() const {
     // Matrix determinant without using cofactor matrix
-    // assert(dimensions() < 4);
     if(dimensions() == 1) {
         return values[0][0];
     } else {

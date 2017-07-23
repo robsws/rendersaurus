@@ -1,5 +1,5 @@
 #include "vector.h"
-
+#include "square_matrix.h"
 #include <assert.h>
 #include <cmath>
 #include <iostream>
@@ -85,12 +85,16 @@ float Vector::dot(const Vector& a, const Vector& b) {
     return result;
 }
 
-// Vector Vector::cross(const Vector& a, const Vector& b) {
-//     // Cross product for orthogonality only makes sense on 3D vector
-//     assert(a.dimensions() == 3);
-//     assert(b.dimensions() == 3);
-//     // Use matrix transformation to get cross product
-// }
+Vector Vector::cross(const Vector& a, const Vector& b) {
+    assert(a.dimensions() == b.dimensions());
+    // Use matrix transformation to get cross product
+    SquareMatrix crossTransform(a.dimensions(), vector<float>({
+         0.0f, -a[2],  a[1],
+         a[2],  0.0f, -a[0],
+        -a[1],  a[0],  0.0f
+    }));
+    return crossTransform * b;
+}
 
 float Vector::magnitude() const {
     float sumOfSquares = 0;

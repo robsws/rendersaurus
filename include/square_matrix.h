@@ -1,21 +1,24 @@
 #pragma once
 
-#include "vector.h"
 #include <vector>
 #include <memory>
 
 using namespace std;
+
+class Vector;
 
 class SquareMatrix {
     public:
         // Construct a empty matrix
         SquareMatrix();
         // Construct a zero square matrix with given size
-        SquareMatrix(int size);
-        // Construct a matrix with given values
+        SquareMatrix(int width);
+        // Construct a matrix with given 2D vector
         SquareMatrix(vector< vector<float> > values);
+        // Construct a matrix of given width populated with given values
+        SquareMatrix(int width, vector<float> values);
         // Construct the identity matrix of given size
-        static SquareMatrix identity(int size);
+        static SquareMatrix identity(int width);
         // Copy constructor
         SquareMatrix(const SquareMatrix& m);
         // Matrix negation
@@ -30,6 +33,8 @@ class SquareMatrix {
         SquareMatrix operator/(float scalar) const;
         // Multiplication by matrix
         SquareMatrix operator*(const SquareMatrix& m) const;
+        // Multiplication by vector
+        Vector operator*(const Vector& v) const;
         // Matrix transpose
         SquareMatrix transpose() const;
         // Matrix determinant

@@ -4,8 +4,6 @@
 
 using namespace std;
 
-class SquareMatrix;
-
 class Vector {
     public:
         // Construct empty vector
@@ -28,8 +26,6 @@ class Vector {
         Vector operator*(float scalar) const;
         // Division by scalar
         Vector operator/(float scalar) const;
-        // Multiplication by matrix
-        Vector operator*(const SquareMatrix& matrix);
         // Normalise vector
         Vector normalise();
         // Dot product
