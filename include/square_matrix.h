@@ -21,6 +21,8 @@ class SquareMatrix {
         static SquareMatrix identity(int width);
         // Copy constructor
         SquareMatrix(const SquareMatrix& m);
+        // Move assignment operator
+        SquareMatrix& operator=(const SquareMatrix& m);
         // Matrix negation
         SquareMatrix operator-() const;
         // Matrix addition
@@ -66,3 +68,6 @@ class SquareMatrix {
         // Judge whether cofactors need to be recalculated
         mutable bool cofactorsAreStale = true;
 };
+
+// Commutativity for multiplying by scalar
+SquareMatrix operator*(float f, const SquareMatrix& v);

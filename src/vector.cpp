@@ -86,7 +86,8 @@ float Vector::dot(const Vector& a, const Vector& b) {
 }
 
 Vector Vector::cross(const Vector& a, const Vector& b) {
-    assert(a.dimensions() == b.dimensions());
+    assert(a.dimensions() == 3);
+    assert(b.dimensions() == 3);
     // Use matrix transformation to get cross product
     SquareMatrix crossTransform(a.dimensions(), vector<float>({
          0.0f, -a[2],  a[1],
@@ -94,6 +95,19 @@ Vector Vector::cross(const Vector& a, const Vector& b) {
         -a[1],  a[0],  0.0f
     }));
     return crossTransform * b;
+}
+
+Vector Vector::projection(const Vector& a, const Vector& b) {
+    assert(a.dimensions() == 3);
+    assert(b.dimensions() == 3);
+    // Use matrix transformation to get projection
+    SquareMatrix projectionTransform(a.dimensions(), vector<float>({
+        b[0]*b[0], b[0]*b[1], b[0]*b[2],
+        b[0]*b[1], b[1]*b[1], b[1]*b[2],
+        b[0]*b[2], b[1]*b[2], b[2]*b[2]
+    }));
+    projectionTransform = projectionTransform / pow(b.magnitude(),2);
+    return projectionTransform * a;
 }
 
 float Vector::magnitude() const {

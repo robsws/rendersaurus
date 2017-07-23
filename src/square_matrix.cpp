@@ -53,6 +53,11 @@ SquareMatrix::SquareMatrix(const SquareMatrix& m) : SquareMatrix(m.dimensions())
     }
 }
 
+SquareMatrix& SquareMatrix::operator=(const SquareMatrix& m) {
+    this->values = m.values;
+    return *this;
+}
+
 SquareMatrix SquareMatrix::applyComponentWiseOperation(auto operation) const {
     SquareMatrix m = SquareMatrix(*this);
     for (int row = 0; row < dimensions(); ++row) {
@@ -222,3 +227,6 @@ float SquareMatrix::operator()(int row, int column) const {
     return values[row][column];
 }
 
+SquareMatrix operator*(float f, const SquareMatrix& m) {
+    return m*f;
+}

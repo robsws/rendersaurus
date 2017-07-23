@@ -32,6 +32,8 @@ class Vector {
         static float dot(const Vector& a, const Vector& b);
         // Cross product
         static Vector cross(const Vector& a, const Vector& b);
+        // Vector projection
+        static Vector projection(const Vector& a, const Vector& b);
         // Magnitude
         float magnitude() const;
         // Get number of dimensions of vector

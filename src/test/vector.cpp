@@ -339,3 +339,52 @@ SCENARIO("Cross product can be calculated between a vector V and another vector"
         }
     }
 }
+
+SCENARIO("A vector V can be projected onto another vector", "[vector]") {
+    vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+    Vector V(ordinary_values1);
+    
+    GIVEN("Another vector W") {
+        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        Vector W(ordinary_values2);
+
+        WHEN("V is projected onto W") {
+            Vector VW = Vector::projection(V, W);
+
+            THEN("The projection is calculated correctly") {
+                REQUIRE(VW[0] == Approx(1.54764f));
+                REQUIRE(VW[1] == Approx(0.128021f));
+                REQUIRE(VW[2] == Approx(3.62896f));
+            }
+
+        }
+    }
+
+    GIVEN("A zero vector Z") {
+        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        Vector Z(zero_values);
+
+        WHEN("V is projected onto Z") {
+            Vector VZ = Vector::projection(V, Z);
+
+            THEN("The result is the undefined") {
+                REQUIRE(isnan(VZ[0]));
+                REQUIRE(isnan(VZ[1]));
+                REQUIRE(isnan(VZ[2]));
+            }
+        }
+    }
+
+    GIVEN("An identical vector") {
+
+        WHEN("V is projected onto V") {
+            Vector VV = Vector::projection(V, V);
+
+            THEN("The result is V") {
+                REQUIRE(VV[0] == Approx(V[0]));
+                REQUIRE(VV[1] == Approx(V[1]));
+                REQUIRE(VV[2] == Approx(V[2]));
+            }
+        }
+    }
+}
