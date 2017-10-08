@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.h"
+#include "square_matrix.h"
 
 class Vertex {
     public:
