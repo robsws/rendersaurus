@@ -4,6 +4,7 @@
 #include "vector.h"
 // #include "quaternion.h"
 #include "shader.h"
+#include "square_matrix.h"
 #include <vector>
 #include <memory>
 
@@ -34,4 +35,4 @@ class Object3D {
     Vector scaleVector;
     // The shader used for rendering this object.
     shared_ptr<Shader> shader;
-}
+};

@@ -8,6 +8,5 @@ class Model {
   public:
       Model(string filename);
       Model(vector<Triangle> triangles);
-  private:
       vector<Triangle> triangles;
 }

@@ -30,7 +30,13 @@ class Shader {
         virtual Fragment computeFragmentColour(const Coord& position, const Vertex& interpolatedVertex) = 0;
         // Transform vertex positions from clip space to window space
         Coord clipSpaceToWindowSpace(const Vector& position);
-        // Transform to be used to transform vertices from object space to world space
+        // Split a triangle into the digital coordinates residing within it.
+        vector<Coord> rasterizeTriangle(Coord a, Coord b, Coord c);
+        // Interpolate vertex attributes across the face of a triangle for one
+        // particular position within the triangle.
+        Vertex interpolateVertexAttributes(Triangle triangle, Coord position, Coord windowA, Coord windowB, Coord windowC);
+        // All transforms should be 4x4 for transforming homogeneous coordinates.
+        // Transform to be used to transform vertices from object space to world space.
         SquareMatrix modelTransform;
         // Transform to be used to transform vertices from world space to camera space
         SquareMatrix cameraTransform;
@@ -40,4 +46,4 @@ class Shader {
         int windowWidth;
         // Height of window used to transform vertices form clip space to window space
         int windowHeight;
-}
+};

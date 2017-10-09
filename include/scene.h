@@ -1,6 +1,7 @@
 #pragma once
 
 #include "object3d.h"
+#include "camera.h"
 
 class Scene {
       // The Scene class is responsible for keeping track of all 3D objects in
@@ -12,10 +13,12 @@ class Scene {
         // Render all objects in the scene and collect together the fragments.
         vector<Fragment> render();
         // Add an object to the scene to be rendered.
-        void addObject(Object3D object);
+        void addObject(const Object3D& object);
         // Update positions of objects in the scene.
         void update();
     private:
         // List of objects in the scene.
         vector<Object3D> objects;
-}
+        // Camera associated with this scene.
+        Camera camera;
+};
