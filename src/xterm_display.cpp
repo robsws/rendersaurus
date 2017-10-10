@@ -10,17 +10,17 @@ XtermDisplay::XtermDisplay(int width, int height, FragmentBuffer* fragmentBuffer
 bool XtermDisplay::initialise() {
     // Start up an ncurses window.
     initscr();
-	if(has_colors() == FALSE) {
-		endwin();
-		return false;
-	}
-	start_color();
-	ncursesWindow = newwin(height, width, 0, 0);	
+    if(has_colors() == FALSE) {
+        endwin();
+        return false;
+    }
+    start_color();
+    ncursesWindow = newwin(height, width, 0, 0);
     // Initialise all 256 colors.
     // Pairs are initialised with both background and foreground as the same colour.
-	for(int i = 0; i < COLORS; i++) {
-		init_pair(i+1, i, i);
-	}
+    for(int i = 0; i < COLORS; i++) {
+        init_pair(i+1, i, i);
+    }
     return true;
 }
 
@@ -63,7 +63,7 @@ bool XtermDisplay::refresh() {
             waddch(ncursesWindow, 'X');
             wattroff(ncursesWindow, COLOR_PAIR(colour));
         }
-	}
+    }
     wrefresh(ncursesWindow);
     return true;
 }

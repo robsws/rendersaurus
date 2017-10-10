@@ -21,10 +21,10 @@ class Camera {
           Projection projection
           );
         // Generate the view matrix to transform vertices based on the camera attributes.
-        SquareMatrix getCameraSpaceTransform();
+        SquareMatrix getCameraSpaceTransform() const;
         // Generate the projection matrix based on the type of projection selected
         // and dimensions of the view frustum.
-        SquareMatrix getClipSpaceTransform();
+        SquareMatrix getClipSpaceTransform() const;
     private:
         // Where the camera exists in world space.
         Vector position;

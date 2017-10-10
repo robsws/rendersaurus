@@ -19,7 +19,7 @@ class Object3D {
     // position using the given shader for generating the fragments for the object.
     Object3D(Model model, Vector position, shared_ptr<Shader> shader);
     // Generate the fragments for this object.
-    vector<Fragment> render();
+    vector<Fragment> render() const;
     // Translate the object by the given vector.
     void translate(const Vector& v);
     // Rotate the object by the given quaternion.

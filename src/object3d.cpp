@@ -8,7 +8,7 @@ Object3D::Object3D(Model model, Vector position, shared_ptr<Shader> shader) :
     position(position),
     shader(shader) {}
 
-vector<Fragment> Object3D::render() {
+vector<Fragment> Object3D::render() const {
     // Generate the fragments for this object.
     vector<Fragment> fragments;
     // Set the model transformation matrix in the shader.

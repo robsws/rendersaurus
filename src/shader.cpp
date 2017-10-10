@@ -3,43 +3,52 @@
 #include "square_matrix.h"
 #include "coord.h"
 
+namespace {
+    // Interpolate vertex attributes across the face of a triangle for one
+    // particular position within the triangle.
+    Vertex interpolateVertexAttributes(Triangle3D clipSpaceTriangle, Triangle2D windowSpaceTriangle, Coord position) {
+
+    }
+}
+
 Shader::Shader(int windowWidth, int windowHeight) :
     windowWidth(windowWidth),
     windowHeight(windowHeight) {}
 
-vector<Fragment> Shader::generateFragments(const Triangle& triangle) {
+vector<Fragment> Shader::generateFragments(const Triangle3D& triangle) const {
     // Transform vertices of triangle to clip space.
     Vertex a = transformVertex(triangle.a);
     Vertex b = transformVertex(triangle.b);
     Vertex c = transformVertex(triangle.c);
     // Transform vertices to window space.
-    Coord aWindowPos = clipSpaceToWindowSpace(a.position);
-    Coord bWindowPos = clipSpaceToWindowSpace(b.position);
-    Coord cWindowPos = clipSpaceToWindowSpace(c.position);
+    Coord aDisplayPos = clipSpaceToWindowSpace(a.position);
+    Coord aDisplayPos = clipSpaceToWindowSpace(b.position);
+    Coord aDisplayPos = clipSpaceToWindowSpace(c.position);
+    Triangle2D projectedTriangle(aDisplayPos, bDisplayPos, cDisplayPos);
     // Rasterization (split triangle into digital pixels)
-    vector<Coord> pixelLocations = rasterizeTriangle(aWindowPos, bWindowPos, cWindowPos);
+    vector<Coord> pixelLocations = projectedTriangle.rasterize();
     // For each pixel inside triangle, interpolate attributes and calculate the
     // fragment colour.
     vector<Fragment> fragments;
     for (Coord pixel : pixelLocations) {
-        Vertex interpolatedAttributes = interpolateVertexAttributes(triangle, pixel, aWindowPos, bWindowPos, cWindowPos);
-        fragments.push_back(computeFragmentColour(pixelLocation, interpolatedAttributes));
+        Vertex interpolatedAttributes = interpolateVertexAttributes(triangle, projectedTriangle, pixel);
+        fragments.push_back(computeFragmentColour(pixel, interpolatedAttributes));
     }
     return fragments;
 }
 
-void Shader::setModelTransform(const SquareMatrix& model_transform) {
-
+void Shader::setModelTransform(const SquareMatrix& modelTransform) {
+    this->modelTransform = modelTransform;
 }
 
-void Shader::setCameraTransform(const SquareMatrix& camera_transform) {
-
+void Shader::setCameraTransform(const SquareMatrix& cameraTransform) {
+    this->cameraTransform = cameraTransform;
 }
 
-void Shader::setProjectionTransform(const SquareMatrix& projection_transform) {
-
+void Shader::setProjectionTransform(const SquareMatrix& projectionTransform) {
+    this->projectionTransform = projectionTransform;
 }
 
-Coord Shader::clipSpaceToWindowSpace(const Vector& position) {
+Coord Shader::clipSpaceToWindowSpace(const Vector& position) const {
 
 }

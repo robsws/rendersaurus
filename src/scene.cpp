@@ -4,7 +4,7 @@
 
 Scene::Scene(Camera camera) : camera(camera) {}
 
-vector<Fragment> Scene::render() {
+vector<Fragment> Scene::render() const {
     // Render all objects in the scene and collect together the fragments.
     vector<Fragment> fragments;
     for(Object3D object : objects) {
