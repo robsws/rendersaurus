@@ -57,8 +57,8 @@ Coord Shader::clipSpaceToWindowSpace(const Vector& position) const {
     // The w coordinate can be used for doing depth interpolation as it contains
     // the original z of the vertex negated.
     Coord windowSpaceCoord(
-        position[0]*windowWidth - windowWidth/2,
-        position[1]*windowHeight - windowHeight/2
+        ((position[0]+1)/2)*windowWidth,
+        ((position[1]+1)/2)*windowHeight
     );
     return windowSpaceCoord;
 }
