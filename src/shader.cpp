@@ -50,5 +50,15 @@ void Shader::setProjectionTransform(const SquareMatrix& projectionTransform) {
 }
 
 Coord Shader::clipSpaceToWindowSpace(const Vector& position) const {
-
+    // In clip space, coordinates are in the range -1 to 1.
+    // Therefore, we can calculate the pixel positions by expanding this
+    // range out to the window width and height.
+    // The z coordinate can be ignored.
+    // The w coordinate can be used for doing depth interpolation as it contains
+    // the original z of the vertex negated.
+    Coord windowSpaceCoord(
+        position[0]*windowWidth - windowWidth/2,
+        position[1]*windowHeight - windowHeight/2
+    );
+    return windowSpaceCoord;
 }
