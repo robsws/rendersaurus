@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.h"
+#include "square_matrix.h"
 
 enum Projection {
   PERSPECTIVE,
@@ -32,11 +33,13 @@ class Camera {
         // Which direction the camera points in in world space.
         Vector direction;
         // The distance from the camera to the near plane of the view frustum.
-        float nearClipDistance,
+        float nearClipDistance;
         // The distance from the camera to the far plane of the view frustum.
-        float farClipDistance,
+        float farClipDistance;
         // The horizontal field of view angle.
-        float fovAngle,
+        float fovAngle;
+        // The ratio between width and height of screen
+        float aspectRatio;
         // The type of projection to use.
         Projection projection;
-}
+};

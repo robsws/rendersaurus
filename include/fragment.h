@@ -5,8 +5,8 @@
 
 class Fragment : public Colour {
     public:
+        Fragment();
         Fragment(float red, float green, float blue, Coord position, float depth);
-    private:
         Coord position;
         float depth;
 };

@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 
     // Set up the world, camera and shader
     Camera camera(
-        Vector(0,0,0,1),
-        Vector(0,0,-1,0),
+        Vector(vector<float>({0.0f,0.0f,0.0f,1.0f})),
+        Vector(vector<float>({0.0f,0.0f,-1.0f,0.0f})),
         1.0f,
         1000.0f,
         90.0f,
@@ -35,12 +35,12 @@ int main(int argc, char **argv)
     shared_ptr<Shader> shaderPtr(new BasicShader(width, height));
 
     // Set up the objects in the world
-    Vertex a(Vector(1,1,-1,1), Colour(255,0,0));
-    Vertex b(Vector(1,2,-1,1), Colour(0,255,0));
-    Vertex c(Vector(2,1,-1,1), Colour(0,0,255));
+    Vertex a(Vector(vector<float>({1.0f,1.0f,-1.0f,1.0f})), Colour(255,0,0));
+    Vertex b(Vector(vector<float>({2.0f,1.0f,-1.0f,1.0f})), Colour(0,255,0));
+    Vertex c(Vector(vector<float>({1.0f,2.0f,-1.0f,1.0f})), Colour(0,0,255));
     Triangle3D triangle(a, b, c);
     Model model(vector<Triangle3D>({triangle}));
-    Object3D obj(model, Vector(0,0,-2,1), shaderPtr);
+    Object3D obj(model, Vector(vector<float>({0.0f,0.0f,-2.0f,1.0f})), shaderPtr);
     scene.addObject(obj);
 
     // Initialise the display
@@ -59,6 +59,5 @@ int main(int argc, char **argv)
     }
     display.finish();
 
-    delete fragmentBuffer;
     return EXIT_SUCCESS;
 }

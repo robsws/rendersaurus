@@ -1,18 +1,19 @@
 #include "triangle2d.h"
 #include "coord.h"
 #include "vector.h"
+#include "square_matrix.h"
 #include <algorithm>
 
 using namespace std;
 
 namespace {
     bool pointOnSameSide(Coord point1, Coord point2, Coord vertexA, Coord vertexB) {
-        Vector aTo1(vector<float>({point1.x-vertexA.x, point1.y-vertexA.y, 1}));
-        Vector aTo2(vector<float>({point2.x-vertexA.x, point2.y-vertexA.y, 1}));
-        Vector aToB(vector<float>({vertexB.x-vertexA.x, vertexB.y-vertexA.y, 1}));
+        Vector aTo1(vector<float>({(float)(point1.x-vertexA.x), (float)(point1.y-vertexA.y), 1}));
+        Vector aTo2(vector<float>({(float)(point2.x-vertexA.x), (float)(point2.y-vertexA.y), 1}));
+        Vector aToB(vector<float>({(float)(vertexB.x-vertexA.x), (float)(vertexB.y-vertexA.y), 1}));
         Vector cross1(Vector::cross(aToB, aTo1));
         Vector cross2(Vector::cross(aToB, aTo2));
-        return Vector::dot(cross1, cross2) >= 0);
+        return Vector::dot(cross1, cross2) >= 0;
     }
 }
 
@@ -28,11 +29,11 @@ vector<Coord> Triangle2D::rasterize() const {
     int minX = min(a.x, min(b.x, c.x));
     int minY = min(a.y, min(b.y, c.y));
     int maxX = max(a.x, max(b.x, c.x));
-    int maxY = max(a.x, max(b.x, c.x));
+    int maxY = max(a.y, max(b.y, c.y));
     // Loop through and check if each (x,y) is within the triangle.
     // If it is, it's added to the return list.
     for(int x = minX; x < maxX; ++x) {
-        for(int y = minY; y < minY; ++y) {
+        for(int y = minY; y < maxY; ++y) {
             Coord point(x,y);
             if(pointWithinTriangle(point)) {
                 pixels.push_back(point);
@@ -44,10 +45,10 @@ vector<Coord> Triangle2D::rasterize() const {
 
 Vector Triangle2D::getBarycentricCoords(Coord point) const {
     // Easier to work with the coordinates as vectors here.
-    Vector vp = point.getVector();
-    Vector va = a.getVector();
-    Vector vb = b.getVector();
-    Vector vc = c.getVector();
+    Vector vp(point.getVector());
+    Vector va(a.getVector());
+    Vector vb(b.getVector());
+    Vector vc(c.getVector());
     // Find coordinates using linear algebra
     // To find barycentric coordinates, we solve the equation
     // P = aA + bB + cC
@@ -60,7 +61,7 @@ Vector Triangle2D::getBarycentricCoords(Coord point) const {
     Vector aToP = vp - va;
     Vector aToB = vb - va;
     Vector aToC = vc - va;
-    SquareMatrix m(vector<float>({
+    SquareMatrix m(2, vector<float>({
         Vector::dot(aToB, aToB), Vector::dot(aToB, aToC),
         Vector::dot(aToB, aToC), Vector::dot(aToC, aToC)
     }));

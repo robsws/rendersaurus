@@ -7,7 +7,5 @@ class Coord {
         Coord(int x, int y);
         int x;
         int y;
-        Vector getVector() const {
-            return Vector(vector<float>({x, y}));
-        }
-}
+        Vector getVector() const;
+};

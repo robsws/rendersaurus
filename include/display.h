@@ -15,5 +15,5 @@ class Display {
     protected:
         int width;
         int height;
-        shared_ptr<FragmentBuffer> fragmentBuffer;
+        shared_ptr<FragmentBuffer> fragmentBufferPtr;
 };

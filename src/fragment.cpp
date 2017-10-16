@@ -1,5 +1,13 @@
 #include "fragment.h"
 
-Fragment::Fragment(float red, float green, float blue) :
-    Colour(red, green, blue) {
+Fragment::Fragment() :
+    Colour(0,0,0),
+    position(0,0),
+    depth(1.0f){
+}
+
+Fragment::Fragment(float red, float green, float blue, Coord position, float depth) :
+    Colour(red, green, blue),
+    position(position),
+    depth(depth){
 }

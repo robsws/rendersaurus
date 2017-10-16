@@ -10,7 +10,7 @@ FragmentBuffer::FragmentBuffer(int width, int height) :
     for (int x = 0; x < width; ++x) {
         vector<Fragment> column = vector<Fragment>();
         for (int y = 0; y < height; ++y) {
-            column.push_back(Fragment(0,0,0));
+            column.push_back(Fragment());
         }
         buffer.push_back(column);
     }

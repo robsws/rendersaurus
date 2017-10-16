@@ -8,7 +8,7 @@ class Vertex {
     public:
         Vertex(Vector position);
         Vertex(float x, float y, float z);
-        Vertex(Vector position, Colour colour)
+        Vertex(Vector position, Colour colour);
         Vector position;
         Colour colour;
 };

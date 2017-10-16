@@ -14,7 +14,7 @@ class Shader {
         Shader(int windowWidth, int windowHeight);
         // Given a triangle from a model, transform the coordinates into clip space
         // and then rasterize to produce a list of fragments.
-        Vector<Fragment> generateFragments(const Triangle3D& triangle) const;
+        vector<Fragment> generateFragments(const Triangle3D& triangle) const;
         // Set the model matrix to be used to transform vertices from object
         // space to world space.
         void setModelTransform(const SquareMatrix& modelTransform);
@@ -24,7 +24,7 @@ class Shader {
         // Set the projection transform to be used to transform vertices from
         // camera space to homogeneous clip space.
         void setProjectionTransform(const SquareMatrix& projectionTransform);
-    private:
+    protected:
         // Transform a vertex and appropriate attributes from
         // object space to clip space.
         virtual Vertex transformVertex(const Vertex& vertex) const = 0;

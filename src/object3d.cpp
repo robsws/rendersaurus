@@ -1,7 +1,8 @@
 #include "object3d.h"
 #include "model.h"
-#include "position.h"
+#include "vector.h"
 #include "shader.h"
+#include "triangle3d.h"
 
 Object3D::Object3D(Model model, Vector position, shared_ptr<Shader> shader) :
     model(model),
@@ -24,7 +25,7 @@ vector<Fragment> Object3D::render() const {
     shader->setModelTransform(modelTransform);
     // Pass each triangle in the model through the shader and add the fragments
     // generated to the list.
-    for (Triangle triangle : model.triangles) {
+    for (Triangle3D triangle : model.triangles) {
         vector<Fragment> triangleFragments = shader->generateFragments(triangle);
         fragments.insert(fragments.end(), triangleFragments.begin(), triangleFragments.end());
     }

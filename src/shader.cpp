@@ -2,6 +2,7 @@
 #include "vertex.h"
 #include "square_matrix.h"
 #include "coord.h"
+#include "triangle2d.h"
 
 namespace {
     // Interpolate vertex attributes across the face of a triangle for one
@@ -39,7 +40,7 @@ namespace {
             // blue component
             barycentricCoords[0] * clipSpaceTriangle.a.colour.blue +
             barycentricCoords[1] * clipSpaceTriangle.b.colour.blue +
-            barycentricCoords[2] * clipSpaceTriangle.c.colour.blue,
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.blue
         );
         return Vertex(interpolatedPosition, interpolatedColour);
     }
