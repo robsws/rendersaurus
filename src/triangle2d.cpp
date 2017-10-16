@@ -42,7 +42,39 @@ vector<Coord> Triangle2D::rasterize() const {
     return pixels;
 }
 
-bool Triangle2D::pointWithinTriangle(Coord point) {
+Vector Triangle2D::getBarycentricCoords(Coord point) const {
+    // Easier to work with the coordinates as vectors here.
+    Vector vp = point.getVector();
+    Vector va = a.getVector();
+    Vector vb = b.getVector();
+    Vector vc = c.getVector();
+    // Find coordinates using linear algebra
+    // To find barycentric coordinates, we solve the equation
+    // P = aA + bB + cC
+    // where P is the point for which we want to find the coords
+    // a, b and c are the barycentric coordinates
+    // A, B and C are the vertices of the triangle
+    // The equation can be rearranged as simultaneous equations to get b and c
+    // then the results can be plugged in to the following equation to get a:
+    // 1 = a + b + c
+    Vector aToP = vp - va;
+    Vector aToB = vb - va;
+    Vector aToC = vc - va;
+    SquareMatrix m(vector<float>({
+        Vector::dot(aToB, aToB), Vector::dot(aToB, aToC),
+        Vector::dot(aToB, aToC), Vector::dot(aToC, aToC)
+    }));
+    m = m.inverse();
+    Vector v(vector<float>({
+        Vector::dot(aToP, aToB),
+        Vector::dot(aToP, aToC)
+    }));
+    Vector bc = m*v;
+    float a = 1 - bc[0] - bc[1];
+    return Vector(vector<float>({a, bc[0], bc[1]}));
+}
+
+bool Triangle2D::pointWithinTriangle(Coord point) const {
     return (
         pointOnSameSide(point, c, a, b) &&
         pointOnSameSide(point, a, b, c) &&

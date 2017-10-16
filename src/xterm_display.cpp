@@ -2,9 +2,12 @@
 #include "fragment_buffer.h"
 
 #include <cstdlib>
+#include <memory>
 
-XtermDisplay::XtermDisplay(int width, int height, FragmentBuffer* fragmentBuffer)
-    : Display(width, height, fragmentBuffer) {
+using namespace std;
+
+XtermDisplay::XtermDisplay(int width, int height, shared_ptr<FragmentBuffer> fragmentBufferPtr)
+    : Display(width, height, fragmentBufferPtr) {
 }
 
 bool XtermDisplay::initialise() {
@@ -56,7 +59,7 @@ bool XtermDisplay::refresh() {
     wmove(ncursesWindow,0,0);
     for(int y = 0; y < height; ++y) {
         for(int x = 0; x < width; ++x) {
-            Fragment fragment = fragmentBuffer->get(x, y);
+            Fragment fragment = fragmentBufferPtr->get(x, y);
             // Convert RGB colour to xterm 256 index
             int colour = convertRgbTo256(fragment);
             wattron(ncursesWindow, COLOR_PAIR(colour));

@@ -1,34 +1,64 @@
 #include "xterm_display.h"
-
+#include "camera.h"
+#include "scene.h"
+#include "basic_shader.h"
+#include "triangle3d.h"
+#include "object3d.h"
+#include "fragment_buffer.h"
+#include <vector>
 #include <iostream>
 #include <stdlib.h>
+#include <memory>
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
-	if(argc != 3) {
-		cout << "Usage: " << argv[0] << " <width> <height>" << endl;
-		return EXIT_FAILURE;
-	}
-	
-	int width = atoi(argv[1]);
-	int height = atoi(argv[2]);
+    if(argc != 3) {
+        cout << "Usage: " << argv[0] << " <width> <height>" << endl;
+        return EXIT_FAILURE;
+    }
 
-	FragmentBuffer* fragmentBuffer = new FragmentBuffer(width, height);
-	XtermDisplay* display = new XtermDisplay(width, height, fragmentBuffer);
-	display->initialise();
-	for(int i = 0; i < 2000; ++i) {
-		for (int x = 0; x < width; ++x) {
-			for (int y = 0; y < height; ++y) {
-				Fragment fragment = Fragment((y+i)%256, 0, (x+i)%256);
-				fragmentBuffer->set(x, y, fragment);
-			}
-		}
-		display->refresh();
-	}
-	display->finish();
-	
-	delete fragmentBuffer;
-	return EXIT_SUCCESS;
-} 
+    int width = atoi(argv[1]);
+    int height = atoi(argv[2]);
+
+    // Set up the world, camera and shader
+    Camera camera(
+        Vector(0,0,0,1),
+        Vector(0,0,-1,0),
+        1.0f,
+        1000.0f,
+        90.0f,
+        (float)height / (float)width,
+        Projection::PERSPECTIVE);
+    Scene scene(camera);
+    shared_ptr<Shader> shaderPtr(new BasicShader(width, height));
+
+    // Set up the objects in the world
+    Vertex a(Vector(1,1,-1,1), Colour(255,0,0));
+    Vertex b(Vector(1,2,-1,1), Colour(0,255,0));
+    Vertex c(Vector(2,1,-1,1), Colour(0,0,255));
+    Triangle3D triangle(a, b, c);
+    Model model(vector<Triangle3D>({triangle}));
+    Object3D obj(model, Vector(0,0,-2,1), shaderPtr);
+    scene.addObject(obj);
+
+    // Initialise the display
+    shared_ptr<FragmentBuffer> fragmentBufferPtr(new FragmentBuffer(width, height));
+    XtermDisplay display(width, height, fragmentBufferPtr);
+    display.initialise();
+
+    for(int i = 0; i < 10000; ++i) {
+        // Update the scene
+        scene.update();
+        // Regenerate the fragments
+        vector<Fragment> fragments = scene.render();
+        // Update the display
+        fragmentBufferPtr->blendFragments(fragments);
+        display.refresh();
+    }
+    display.finish();
+
+    delete fragmentBuffer;
+    return EXIT_SUCCESS;
+}

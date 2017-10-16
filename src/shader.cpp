@@ -7,7 +7,41 @@ namespace {
     // Interpolate vertex attributes across the face of a triangle for one
     // particular position within the triangle.
     Vertex interpolateVertexAttributes(Triangle3D clipSpaceTriangle, Triangle2D windowSpaceTriangle, Coord position) {
-
+        // Find the barycentric coordinates of the point within the window space
+        // triangle.
+        Vector barycentricCoords = windowSpaceTriangle.getBarycentricCoords(position);
+        // Create a new vertex containing the averaged attributes.
+        Vector interpolatedPosition(vector<float>({
+            // x coordinate
+            barycentricCoords[0] * clipSpaceTriangle.a.position[0] +
+            barycentricCoords[1] * clipSpaceTriangle.b.position[0] +
+            barycentricCoords[2] * clipSpaceTriangle.c.position[0],
+            // y coordinate
+            barycentricCoords[0] * clipSpaceTriangle.a.position[1] +
+            barycentricCoords[1] * clipSpaceTriangle.b.position[1] +
+            barycentricCoords[2] * clipSpaceTriangle.c.position[1],
+            // z coordinate
+            barycentricCoords[0] * clipSpaceTriangle.a.position[2] +
+            barycentricCoords[1] * clipSpaceTriangle.b.position[2] +
+            barycentricCoords[2] * clipSpaceTriangle.c.position[2],
+            // w coordinate
+            1
+        }));
+        Colour interpolatedColour(
+            // red component
+            barycentricCoords[0] * clipSpaceTriangle.a.colour.red +
+            barycentricCoords[1] * clipSpaceTriangle.b.colour.red +
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.red,
+            // green component
+            barycentricCoords[0] * clipSpaceTriangle.a.colour.green +
+            barycentricCoords[1] * clipSpaceTriangle.b.colour.green +
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.green,
+            // blue component
+            barycentricCoords[0] * clipSpaceTriangle.a.colour.blue +
+            barycentricCoords[1] * clipSpaceTriangle.b.colour.blue +
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.blue,
+        );
+        return Vertex(interpolatedPosition, interpolatedColour);
     }
 }
 
@@ -22,8 +56,8 @@ vector<Fragment> Shader::generateFragments(const Triangle3D& triangle) const {
     Vertex c = transformVertex(triangle.c);
     // Transform vertices to window space.
     Coord aDisplayPos = clipSpaceToWindowSpace(a.position);
-    Coord aDisplayPos = clipSpaceToWindowSpace(b.position);
-    Coord aDisplayPos = clipSpaceToWindowSpace(c.position);
+    Coord bDisplayPos = clipSpaceToWindowSpace(b.position);
+    Coord cDisplayPos = clipSpaceToWindowSpace(c.position);
     Triangle2D projectedTriangle(aDisplayPos, bDisplayPos, cDisplayPos);
     // Rasterization (split triangle into digital pixels)
     vector<Coord> pixelLocations = projectedTriangle.rasterize();

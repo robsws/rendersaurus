@@ -14,7 +14,7 @@ FragmentBuffer::FragmentBuffer(int width, int height) :
         }
         buffer.push_back(column);
     }
-    
+
 }
 
 FragmentBuffer::~FragmentBuffer() {
@@ -39,4 +39,11 @@ void FragmentBuffer::set(int x, int y, const Fragment& fragment) {
     y = clamp(y, 0, height);
     // Set rgb values
     buffer[x][y].set(fragment);
+}
+
+void FragmentBuffer::blendFragments(vector<Fragment> fragments) {
+    // TODO: implement Z buffer
+    for (Fragment fragment : fragments) {
+        set(fragment.position.x, fragment.position.y, fragment);
+    }
 }

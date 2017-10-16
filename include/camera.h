@@ -3,8 +3,8 @@
 #include "vector.h"
 
 enum Projection {
-  PROJECTION_PERSPECTIVE,
-  PROJECTION_ORTHO
+  PERSPECTIVE,
+  ORTHOGRAPHIC
 };
 
 class Camera {
@@ -18,8 +18,9 @@ class Camera {
           float nearClipDistance,
           float farClipDistance,
           float fovAngle,
+          float aspectRatio,
           Projection projection
-          );
+        );
         // Generate the view matrix to transform vertices based on the camera attributes.
         SquareMatrix getCameraSpaceTransform() const;
         // Generate the projection matrix based on the type of projection selected

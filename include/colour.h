@@ -3,6 +3,7 @@
 class Colour {
     public:
         // Methods
+        Colour();
         Colour(float red, float green, float blue);
         Colour operator*(float scalar) const;
         Colour operator*(const Colour& colour) const;

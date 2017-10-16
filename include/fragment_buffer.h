@@ -12,6 +12,7 @@ class FragmentBuffer {
         ~FragmentBuffer();
         Fragment get(int x, int y) const;
         void set(int x, int y, const Fragment& fragment);
+        void blendFragments(vector<Fragment> fragments);
     private:
         // Buffer stores columns contiguously
         vector< vector<Fragment> > buffer;
