@@ -9,10 +9,13 @@ FragmentBuffer::FragmentBuffer(int width, int height) :
     buffer = vector< vector<Fragment> >();
     for (int x = 0; x < width; ++x) {
         vector<Fragment> column = vector<Fragment>();
+        vector<float> zColumn = vector<float>();
         for (int y = 0; y < height; ++y) {
             column.push_back(Fragment());
+            zColumn.push_back(9999.0f);
         }
         buffer.push_back(column);
+        zBuffer.push_back(zColumn);
     }
 
 }
@@ -44,6 +47,9 @@ void FragmentBuffer::set(int x, int y, const Fragment& fragment) {
 void FragmentBuffer::blendFragments(vector<Fragment> fragments) {
     // TODO: implement Z buffer
     for (Fragment fragment : fragments) {
-        set(fragment.position.x, fragment.position.y, fragment);
+        if(fragment.depth < zBuffer[fragment.position.x][fragment.position.y]) {
+            set(fragment.position.x, fragment.position.y, fragment);
+            zBuffer[fragment.position.x][fragment.position.y] = fragment.depth;
+        }
     }
 }

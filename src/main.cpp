@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         Vector(vector<float>({0.0f,0.0f,-1.0f,0.0f})),
         1.0f,
         1000.0f,
-        90.0f,
+        80.0f,
         (float)height / (float)width,
         Projection::PERSPECTIVE);
     Scene scene(camera);
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     // Triangle3D triangle(a, b, c);
     // Model model(vector<Triangle3D>({triangle}));
     // Object3D obj(model, Vector(vector<float>({0.0f,0.0f,2.0f,1.0f})), shaderPtr);
-    Object3D obj = createCube(Vector(vector<float>({1.0f,1.5f,2.0f,1.0f})), shaderPtr);
+    Object3D obj = createCube(Vector(vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
     obj.scale(Vector(vector<float>({1.0f,0.5f,1.0f})));
     scene.addObject(obj);
 
