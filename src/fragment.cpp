@@ -1,7 +1,7 @@
 #include "fragment.h"
 
 Fragment::Fragment() :
-    Colour(0,0,0),
+    Colour(0,0,20),
     position(0,0),
     depth(1.0f){
 }

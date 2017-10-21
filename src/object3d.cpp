@@ -44,5 +44,5 @@ void Object3D::scale(const Vector& v) {
         scaleVector[1] * v[1],
         scaleVector[2] * v[2]
     };
-    scaleVector = newScale;
+    scaleVector = Vector(newScale);
 }
