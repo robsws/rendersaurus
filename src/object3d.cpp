@@ -7,7 +7,9 @@
 Object3D::Object3D(Model model, Vector position, shared_ptr<Shader> shader) :
     model(model),
     position(position),
-    shader(shader) {}
+    shader(shader) {
+    scaleVector = Vector(vector<float>{1,1,1});
+}
 
 vector<Fragment> Object3D::render() const {
     // Generate the fragments for this object.

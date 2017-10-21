@@ -67,7 +67,10 @@ vector<Fragment> Shader::generateFragments(const Triangle3D& triangle) const {
     vector<Fragment> fragments;
     for (Coord pixel : pixelLocations) {
         Vertex interpolatedAttributes = interpolateVertexAttributes(triangle, projectedTriangle, pixel);
-        fragments.push_back(computeFragmentColour(pixel, interpolatedAttributes));
+        // Only fragments from inside the screen get rendered.
+        if(!(pixel.x < 0 || pixel.x >= windowWidth || pixel.y < 0 || pixel.y >= windowHeight)) {
+            fragments.push_back(computeFragmentColour(pixel, interpolatedAttributes));
+        }
     }
     return fragments;
 }

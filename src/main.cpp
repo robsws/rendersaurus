@@ -33,14 +33,15 @@ int main(int argc, char **argv)
         Projection::PERSPECTIVE);
     Scene scene(camera);
     shared_ptr<Shader> shaderPtr(new BasicShader(width, height));
+    shaderPtr->setProjectionTransform(camera.getClipSpaceTransform());
 
     // Set up the objects in the world
-    Vertex a(Vector(vector<float>({1.0f,1.0f,-1.0f,1.0f})), Colour(255,0,0));
-    Vertex b(Vector(vector<float>({2.0f,1.0f,-1.0f,1.0f})), Colour(0,255,0));
-    Vertex c(Vector(vector<float>({1.0f,2.0f,-1.0f,1.0f})), Colour(0,0,255));
+    Vertex a(Vector(vector<float>({1.0f,1.0f,1.0f,1.0f})), Colour(255,0,0));
+    Vertex b(Vector(vector<float>({2.0f,1.0f,1.0f,1.0f})), Colour(0,255,0));
+    Vertex c(Vector(vector<float>({1.0f,2.0f,1.0f,1.0f})), Colour(0,0,255));
     Triangle3D triangle(a, b, c);
     Model model(vector<Triangle3D>({triangle}));
-    Object3D obj(model, Vector(vector<float>({0.0f,0.0f,-2.0f,1.0f})), shaderPtr);
+    Object3D obj(model, Vector(vector<float>({0.0f,0.0f,2.0f,1.0f})), shaderPtr);
     scene.addObject(obj);
 
     // Initialise the display
@@ -48,9 +49,10 @@ int main(int argc, char **argv)
     XtermDisplay display(width, height, fragmentBufferPtr);
     display.initialise();
 
-    for(int i = 0; i < 10000; ++i) {
+    for(int i = 0; i < 100; ++i) {
         // Update the scene
         scene.update();
+        shaderPtr->setCameraTransform(camera.getCameraSpaceTransform());
         // Regenerate the fragments
         vector<Fragment> fragments = scene.render();
         // Update the display
