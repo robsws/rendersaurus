@@ -45,7 +45,6 @@ void FragmentBuffer::set(int x, int y, const Fragment& fragment) {
 }
 
 void FragmentBuffer::blendFragments(vector<Fragment> fragments) {
-    // TODO: implement Z buffer
     for (Fragment fragment : fragments) {
         if(fragment.depth < zBuffer[fragment.position.x][fragment.position.y]) {
             set(fragment.position.x, fragment.position.y, fragment);
