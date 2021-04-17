@@ -1,6 +1,6 @@
 COMPILER := g++
 DEBUG := -g
-COMPILER_FLAGS := -Wall -std=c++14 -I/usr/include/ -I./dependencies/include/ -I./include/ -c $(DEBUG)
+COMPILER_FLAGS := -Wall -std=c++14 -I/usr/include/ -I./dependencies/include/ -I./include/ -c -fconcepts $(DEBUG)
 LINKER_FLAGS := -Wall $(DEBUG)
 LIBS := -lncursesw
 BIN := ./bin
