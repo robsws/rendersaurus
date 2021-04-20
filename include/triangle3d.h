@@ -1,16 +1,14 @@
 #pragma once
 
 #include "vertex.h"
-#include <vector>
 
-using namespace std;
+class Vector;
 
 class Triangle3D {
     public:
+        Triangle3D(Vertex a, Vertex b, Vertex c);
+        Vector normal() const;
         Vertex a;
         Vertex b;
         Vertex c;
-        
-        Triangle3D(Vertex a, Vertex b, Vertex c);
-        Vector normal() const;
 };
