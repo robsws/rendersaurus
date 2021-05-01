@@ -1,8 +1,8 @@
 # rendersaurus
 
-An attempt to build a 3D graphics library from scratch using only the CPU.
+A 3D graphics library built from scratch using only the CPU.
 
-Only works on Linux at the moment due to dependency on ncurses display.
+Uses ncurses on Linux and Windows GDI on Windows.
 
 Current progress:
 
