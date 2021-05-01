@@ -1,12 +1,23 @@
+ifeq ($(OS),Windows_NT)
+    ON_OS := Windows
+else
+    ON_OS := $(shell uname)
+endif
 COMPILER := g++
 DEBUG := -g
-COMPILER_FLAGS := -Wall -std=c++14 -I/usr/include/ -I./dependencies/include/ -I./include/ -c $(DEBUG)
+COMPILER_FLAGS := -Wall -std=c++14 -I/usr/include/ -I./dependencies/include/ -I./include/ -fconcepts -c $(DEBUG)
 LINKER_FLAGS := -Wall $(DEBUG)
-LIBS := -lncursesw
 BIN := ./bin
 SRC := ./src
 SRC_FILES := $(wildcard ./src/*.cpp)
 SRC_FILES := $(filter-out ./src/main.cpp, $(SRC_FILES))
+ifeq ($(ON_OS),Windows)
+	SRC_FILES := $(filter-out ./src/xterm_display.cpp, $(SRC_FILES))
+	LIBS := -lgdi32
+else
+	SRC_FILES := $(filter-out ./src/gdi_display.cpp, $(SRC_FILES))
+	LIBS := -lncursesw
+endif
 OBJECTS := $(patsubst ./src/%.cpp, ./bin/%.o, $(SRC_FILES))
 TEST_OBJECTS := $(patsubst ./src/test/%.cpp,./bin/test/%.o,$(wildcard ./src/test/*.cpp))
 

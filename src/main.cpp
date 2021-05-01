@@ -1,4 +1,9 @@
-#include "xterm_display.h"
+#include "display.h"
+#ifdef _WIN32
+    #include "gdi_display.h"
+#else
+    #include "xterm_display.h"
+#endif
 #include "camera.h"
 #include "scene.h"
 #include "basic_shader.h"
@@ -11,6 +16,14 @@
 #include <memory>
 
 using namespace std;
+
+unique_ptr<Display> getDisplay(int width, int height, shared_ptr<FragmentBuffer> fragmentBufferPtr) {
+    #ifdef _WIN32
+        return make_unique<GdiDisplay>(GdiDisplay(width, height, fragmentBufferPtr));
+    #else
+        return make_unique<XtermDisplay>(XtermDisplay(width, height, fragmentBufferPtr));
+    #endif
+}
 
 Object3D createCube(Vector position, shared_ptr<Shader> shaderPtr) {
     // 8 vertices in total, some can be reused
@@ -113,8 +126,8 @@ int main(int argc, char **argv)
 
     // Initialise the display
     shared_ptr<FragmentBuffer> fragmentBufferPtr(new FragmentBuffer(width, height));
-    XtermDisplay display(width, height, fragmentBufferPtr);
-    display.initialise();
+    unique_ptr<Display> display = getDisplay(width, height, fragmentBufferPtr);
+    display->initialise();
 
     for(int i = 0; i < 60; ++i) {
         // Update the scene
@@ -124,9 +137,9 @@ int main(int argc, char **argv)
         vector<Fragment> fragments = scene.render();
         // Update the display
         fragmentBufferPtr->blendFragments(fragments);
-        display.refresh();
+        display->refresh();
     }
-    display.finish();
+    display->finish();
 
     return EXIT_SUCCESS;
 }
