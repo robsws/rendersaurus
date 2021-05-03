@@ -12,8 +12,9 @@ class Display {
         virtual bool initialise() = 0; // Start up the display.
         virtual bool refresh() = 0; // Load the display with the contents of the fragment buffer.
         virtual bool finish() = 0; // Shut down the display.
+        const int width;
+        const int height;
+        const shared_ptr<FragmentBuffer> fragmentBufferPtr;
     protected:
-        int width;
-        int height;
-        shared_ptr<FragmentBuffer> fragmentBufferPtr;
+        bool initialised;
 };

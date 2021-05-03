@@ -4,10 +4,10 @@
 #include "shader.h"
 #include "triangle3d.h"
 
-Object3D::Object3D(Model model, Vector position, shared_ptr<Shader> shader) :
+Object3D::Object3D(Model model, Vector position, shared_ptr<Shader> shaderPtr) :
     model(model),
     position(position),
-    shader(shader) {
+    shaderPtr(shaderPtr) {
     scaleVector = Vector(vector<float>{1,1,1});
 }
 
@@ -24,11 +24,11 @@ vector<Fragment> Object3D::render() const {
         0,              0,              scaleVector[2], position[2],
         0,              0,              0,              1
     }));
-    shader->setModelTransform(modelTransform);
+    shaderPtr->setModelTransform(modelTransform);
     // Pass each triangle in the model through the shader and add the fragments
     // generated to the list.
     for (Triangle3D triangle : model.triangles) {
-        vector<Fragment> triangleFragments = shader->generateFragments(triangle);
+        vector<Fragment> triangleFragments = shaderPtr->generateFragments(triangle);
         fragments.insert(fragments.end(), triangleFragments.begin(), triangleFragments.end());
     }
     return fragments;

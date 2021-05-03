@@ -1,3 +1,4 @@
+#include "rendersaurus.h"
 #include "display.h"
 #ifdef _WIN32
     #include "gdi_display.h"
@@ -17,7 +18,8 @@
 
 using namespace std;
 
-unique_ptr<Display> getDisplay(int width, int height, shared_ptr<FragmentBuffer> fragmentBufferPtr) {
+unique_ptr<Display> getDisplay(int width, int height) {
+    auto fragmentBufferPtr = make_shared<FragmentBuffer>(width, height);
     #ifdef _WIN32
         return make_unique<GdiDisplay>(GdiDisplay(width, height, fragmentBufferPtr));
     #else
@@ -100,46 +102,17 @@ int main(int argc, char **argv)
     int width = atoi(argv[1]);
     int height = atoi(argv[2]);
 
-    // Set up the world, camera and shader
-    Camera camera(
-        Vector(vector<float>({-1.0f,-1.6f,0.0f,1.0f})),
-        Vector(vector<float>({0.0f,0.0f,-1.0f,0.0f})),
-        1.0f,
-        1000.0f,
-        80.0f,
-        (float)height / (float)width,
-        Projection::PERSPECTIVE);
-    Scene scene(camera);
-    shared_ptr<Shader> shaderPtr(new BasicShader(width, height));
-    shaderPtr->setProjectionTransform(camera.getClipSpaceTransform());
+    unique_ptr<Display> displayPtr = getDisplay(width, height);
+    shared_ptr<Shader> shaderPtr = make_shared<BasicShader>(width, height);
+    Rendersaurus rendersaurus(move(displayPtr), shaderPtr);
 
     // Set up the objects in the world
-    // Vertex a(Vector(vector<float>({1.0f,1.0f,1.0f,1.0f})), Colour(255,0,0));
-    // Vertex b(Vector(vector<float>({2.0f,1.0f,1.0f,1.0f})), Colour(0,255,0));
-    // Vertex c(Vector(vector<float>({1.0f,2.0f,1.0f,1.0f})), Colour(0,0,255));
-    // Triangle3D triangle(a, b, c);
-    // Model model(vector<Triangle3D>({triangle}));
-    // Object3D obj(model, Vector(vector<float>({0.0f,0.0f,2.0f,1.0f})), shaderPtr);
     Object3D obj = createCube(Vector(vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
-    obj.scale(Vector(vector<float>({1.0f,0.5f,1.0f})));
-    scene.addObject(obj);
-
-    // Initialise the display
-    shared_ptr<FragmentBuffer> fragmentBufferPtr(new FragmentBuffer(width, height));
-    unique_ptr<Display> display = getDisplay(width, height, fragmentBufferPtr);
-    display->initialise();
+    rendersaurus.addObject(obj);
 
     for(int i = 0; i < 60; ++i) {
-        // Update the scene
-        scene.update();
-        shaderPtr->setCameraTransform(camera.getCameraSpaceTransform());
-        // Regenerate the fragments
-        vector<Fragment> fragments = scene.render();
-        // Update the display
-        fragmentBufferPtr->blendFragments(fragments);
-        display->refresh();
+        rendersaurus.refresh();
     }
-    display->finish();
 
     return EXIT_SUCCESS;
 }

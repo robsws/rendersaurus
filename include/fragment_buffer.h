@@ -17,6 +17,6 @@ class FragmentBuffer {
         // Buffer stores columns contiguously
         vector< vector<Fragment> > buffer;
         vector< vector<float> > zBuffer;
-        int width;
-        int height;
+        const int width;
+        const int height;
 };
