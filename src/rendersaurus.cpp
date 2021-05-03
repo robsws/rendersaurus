@@ -1,4 +1,5 @@
 #include "rendersaurus.h"
+#include <iostream>
 
 using namespace std;
 
@@ -43,5 +44,10 @@ void Rendersaurus::refresh() {
 }
 
 Rendersaurus::~Rendersaurus() {
-    displayPtr->finish();
+    try {
+        displayPtr->finish();
+    } catch(...) {
+        cerr << "Display threw exception while destroying. Terminating." << endl;
+        abort();
+    }
 }
