@@ -25,20 +25,19 @@ void Rendersaurus::initialise() {
     this->displayPtr->initialise();
 }
 
-void Rendersaurus::addObject(const Object3D& object) {
-    this->scene.addObject(object);
+void Rendersaurus::addObject(shared_ptr<const Object3D> objectPtr) {
+    this->scene.addObject(objectPtr);
 }
 
 void Rendersaurus::refresh() {
     if (!this->initialised) {
         this->initialise();
     }
-    // Update the scene
-    scene.update();
     shaderPtr->setCameraTransform(camera.getCameraSpaceTransform());
     // Regenerate the fragments
     vector<Fragment> fragments = scene.render();
     // Update the display
+    this->displayPtr->fragmentBufferPtr->clear();
     this->displayPtr->fragmentBufferPtr->blendFragments(fragments);
     this->displayPtr->refresh();
 }

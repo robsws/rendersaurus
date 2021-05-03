@@ -13,12 +13,12 @@ class Scene {
         // Render all objects in the scene and collect together the fragments.
         vector<Fragment> render() const;
         // Add an object to the scene to be rendered.
-        void addObject(const Object3D& object);
+        void addObject(shared_ptr<const Object3D> objectPtr);
         // Update positions of objects in the scene.
         void update();
     private:
         // List of objects in the scene.
-        vector<Object3D> objects;
+        vector<shared_ptr<const Object3D>> objectPtrs;
         // Camera associated with this scene.
         Camera camera;
 };

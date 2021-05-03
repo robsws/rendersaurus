@@ -8,7 +8,7 @@ class Rendersaurus {
         Rendersaurus(unique_ptr<Display> displayPtr, shared_ptr<Shader> shaderPtr);
         ~Rendersaurus();
         void initialise();
-        void addObject(const Object3D& object);
+        void addObject(shared_ptr<const Object3D> objectPtr);
         void refresh();
     private:
         Camera camera;

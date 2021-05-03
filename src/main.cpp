@@ -27,7 +27,7 @@ unique_ptr<Display> getDisplay(int width, int height) {
     #endif
 }
 
-Object3D createCube(Vector position, shared_ptr<Shader> shaderPtr) {
+shared_ptr<Object3D> createCube(Vector position, shared_ptr<Shader> shaderPtr) {
     // 8 vertices in total, some can be reused
     // Vertex a(Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0));
     // Vertex b(Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0));
@@ -89,7 +89,7 @@ Object3D createCube(Vector position, shared_ptr<Shader> shaderPtr) {
     // triangles.push_back(Triangle3D(f, g, h));
     // Combine into the object3D
     Model model(triangles);
-    return Object3D(model, position, shaderPtr);
+    return make_shared<Object3D>(model, position, shaderPtr);
 }
 
 int main(int argc, char **argv)
@@ -107,11 +107,14 @@ int main(int argc, char **argv)
     Rendersaurus rendersaurus(move(displayPtr), shaderPtr);
 
     // Set up the objects in the world
-    Object3D obj = createCube(Vector(vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
-    rendersaurus.addObject(obj);
+    shared_ptr<Object3D> objPtr = createCube(Vector(vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
+    rendersaurus.addObject(objPtr);
 
+    Vector translationVector(vector<float>({1.0f,1.0f,0.0f,0.0f}));
     for(int i = 0; i < 60; ++i) {
         rendersaurus.refresh();
+        objPtr->translate(translationVector);
+        cout << "Frame " << i << endl;
     }
 
     return EXIT_SUCCESS;
