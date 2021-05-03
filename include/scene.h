@@ -14,8 +14,6 @@ class Scene {
         vector<Fragment> render() const;
         // Add an object to the scene to be rendered.
         void addObject(shared_ptr<const Object3D> objectPtr);
-        // Update positions of objects in the scene.
-        void update();
     private:
         // List of objects in the scene.
         vector<shared_ptr<const Object3D>> objectPtrs;

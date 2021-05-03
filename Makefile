@@ -4,7 +4,7 @@ else
     ON_OS := $(shell uname)
 endif
 COMPILER := g++
-DEBUG := -g -gdwarf-2 -O0
+DEBUG := -g -gdwarf-2 -O0 -fno-omit-frame-pointer
 COMPILER_FLAGS := -Wall -std=c++14 -I/usr/include/ -I./dependencies/include/ -I./include/ -fconcepts -c $(DEBUG)
 LINKER_FLAGS := -Wall $(DEBUG)
 BIN := ./bin
