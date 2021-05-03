@@ -110,11 +110,10 @@ int main(int argc, char **argv)
     shared_ptr<Object3D> objPtr = createCube(Vector(vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
     rendersaurus.addObject(objPtr);
 
-    Vector translationVector(vector<float>({1.0f,1.0f,0.0f,0.0f}));
+    Vector translationVector(vector<float>({0.1f,0.1f,0.0f,0.0f}));
     for(int i = 0; i < 60; ++i) {
         rendersaurus.refresh();
         objPtr->translate(translationVector);
-        cout << "Frame " << i << endl;
     }
 
     return EXIT_SUCCESS;

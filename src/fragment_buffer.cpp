@@ -48,6 +48,7 @@ void FragmentBuffer::clear() {
     for (int x = 0; x < width; ++x) {
         for (int y = 0; y < height; ++y) {
             set(x, y, Fragment());
+            zBuffer[x][y] = 9999.0f;
         }
     }
 }
