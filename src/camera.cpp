@@ -20,7 +20,7 @@ SquareMatrix Camera::getCameraSpaceTransform() const {
     // To get to camera space we need to perform a translation in the opposite
     // direction from the direction the camera is away from the origin.
     // TODO - encorporate direction (rotation)
-    SquareMatrix cameraTransform(4, vector<float>({
+    SquareMatrix cameraTransform(4, std::vector<float>({
         1,0,0,position[0],
         0,1,0,position[1],
         0,0,1,position[2],
@@ -41,7 +41,7 @@ SquareMatrix Camera::getClipSpaceTransform() const {
     float t = aspectRatio*nearClipDistance/projectionPlaneDistance;
     float b = -aspectRatio*nearClipDistance/projectionPlaneDistance;
     // Generate the matrix
-    SquareMatrix clipTransform(4, vector<float>({
+    SquareMatrix clipTransform(4, std::vector<float>({
         (2 * n) / (r - l), 0,                 (r + l) / (r - l),  0,
         0,                 (2 * n) / (t - b), (t + b) / (t - b),  0,
         0,                 0,                -(f + n) / (f - n),  (-2*n*f)/(f-n),

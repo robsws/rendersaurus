@@ -4,17 +4,17 @@
 
 Scene::Scene(Camera camera) : camera(camera) {}
 
-vector<Fragment> Scene::render() const {
+std::vector<Fragment> Scene::render() const {
     // Render all objects in the scene and collect together the fragments.
-    vector<Fragment> fragments;
+    std::vector<Fragment> fragments;
     for(auto objectPtr : objectPtrs) {
-        vector<Fragment> objectFragments(objectPtr->render());
+        std::vector<Fragment> objectFragments(objectPtr->render());
         fragments.insert(fragments.end(), objectFragments.begin(), objectFragments.end());
     }
     return fragments;
 }
 
-void Scene::addObject(shared_ptr<const Object3D> objectPtr) {
+void Scene::addObject(std::shared_ptr<const Object3D> objectPtr) {
     // Add an object to the scene to be rendered.
     objectPtrs.push_back(objectPtr);
 }

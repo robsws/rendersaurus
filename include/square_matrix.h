@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,27 +15,22 @@ class SquareMatrix {
         // Construct a zero square matrix with given size
         SquareMatrix(int width);
         // Construct a matrix with given 2D vector
-        SquareMatrix(vector< vector<float> > values);
+        SquareMatrix(std::vector< std::vector<float> > values);
         // Construct a matrix of given width populated with given values
-        SquareMatrix(int width, vector<float> values);
+        SquareMatrix(int width, std::vector<float> values);
         // Construct the identity matrix of given size
         static SquareMatrix identity(int width);
         // Copy constructor
         SquareMatrix(const SquareMatrix& m);
-        // Move assignment operator
-        SquareMatrix& operator=(const SquareMatrix& m);
+        // Assignment operators
+        SquareMatrix& operator=(SquareMatrix m);
+        SquareMatrix& operator+=(const SquareMatrix& m);
+        SquareMatrix& operator-=(const SquareMatrix& m);
+        SquareMatrix& operator*=(const SquareMatrix& m);
+        SquareMatrix& operator*=(float scalar);
+        SquareMatrix& operator/=(float scalar);
         // Matrix negation
         SquareMatrix operator-() const;
-        // Matrix addition
-        SquareMatrix operator+(const SquareMatrix& m) const;
-        // Matrix subtraction
-        SquareMatrix operator-(const SquareMatrix& m) const;
-        // Multiplication by scalar
-        SquareMatrix operator*(float scalar) const;
-        // Division by scalar
-        SquareMatrix operator/(float scalar) const;
-        // Multiplication by matrix
-        SquareMatrix operator*(const SquareMatrix& m) const;
         // Multiplication by vector
         Vector operator*(const Vector& v) const;
         // Matrix transpose
@@ -52,9 +48,15 @@ class SquareMatrix {
         // Element access
         float& operator()(int row, int column);
         float operator()(int row, int column) const;
+        friend void swap(SquareMatrix& first, SquareMatrix& second) noexcept {
+            using std::swap;
+            swap(first.values, second.values);
+            swap(first.cofactors, second.cofactors);
+            swap(first.cofactorsAreStale, second.cofactorsAreStale);
+        }
     private:
         // Apply an operation to every element of the matrix
-        SquareMatrix applyComponentWiseOperation(auto operation) const;
+        void applyComponentWiseOperation(auto operation);
         // Return the matrix given by removing row i and column j
         SquareMatrix subMatrix(int i, int j) const;
         // Calculate the determinant recursively without using the cofactor matrix
@@ -62,12 +64,39 @@ class SquareMatrix {
         // Compute the matrix of cofactors for this matrix
         void computeCofactorMatrix() const;
         // Actual elements of the matrix
-        vector< vector<float> > values;
+        std::vector< std::vector<float> > values;
         // Cofactor matrix
-        mutable unique_ptr<SquareMatrix> cofactors = NULL;
+        mutable std::unique_ptr<SquareMatrix> cofactors = NULL;
         // Judge whether cofactors need to be recalculated
         mutable bool cofactorsAreStale = true;
 };
 
+// Matrix addition
+inline SquareMatrix operator+(SquareMatrix m, const SquareMatrix& n) {
+    m += n;
+    return m;
+};
+// Matrix subtraction
+inline SquareMatrix operator-(SquareMatrix m, const SquareMatrix& n) {
+    m -= n;
+    return m;
+}
+// Multiplication by scalar
+inline SquareMatrix operator*(SquareMatrix m, float scalar) {
+    m *= scalar;
+    return m;
+};
 // Commutativity for multiplying by scalar
-SquareMatrix operator*(float f, const SquareMatrix& v);
+inline SquareMatrix operator*(float f, SquareMatrix m) {
+    return m * f;
+}
+// Division by scalar
+inline SquareMatrix operator/(SquareMatrix m, float scalar) {
+    m /= scalar;
+    return m;
+}
+// Multiplication by matrix
+inline SquareMatrix operator*(SquareMatrix m, const SquareMatrix& n) {
+    m *= n;
+    return m;
+}

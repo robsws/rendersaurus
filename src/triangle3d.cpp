@@ -2,14 +2,8 @@
 #include "vertex.h"
 #include "vector.h"
 
-Triangle3D::Triangle3D(Vertex a, Vertex b, Vertex c) :
-    a(a),
-    b(b),
-    c(c)
-{}
-
-Vector Triangle3D::normal() const {
-    Vector ab = b.position - a.position;
-    Vector ac = c.position - a.position;
-    return Vector::cross(ab, ac);
+Vector normal(const Triangle3D& triangle) {
+    Vector ab = triangle.b.position - triangle.a.position;
+    Vector ac = triangle.c.position - triangle.a.position;
+    return cross(ab, ac);
 }

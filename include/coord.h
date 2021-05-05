@@ -1,11 +1,6 @@
 #pragma once
 
-#include "vector.h"
-
-class Coord {
-    public:
-        Coord(int x, int y);
-        int x;
-        int y;
-        Vector getVector() const;
+struct Coord {
+    int x;
+    int y;
 };

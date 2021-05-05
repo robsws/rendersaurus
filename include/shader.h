@@ -14,7 +14,7 @@ class Shader {
         Shader(int windowWidth, int windowHeight);
         // Given a triangle from a model, transform the coordinates into clip space
         // and then rasterize to produce a list of fragments.
-        vector<Fragment> generateFragments(const Triangle3D& triangle) const;
+        std::vector<Fragment> generateFragments(const Triangle3D& triangle) const;
         // Set the model matrix to be used to transform vertices from object
         // space to world space.
         void setModelTransform(const SquareMatrix& modelTransform);

@@ -6,13 +6,13 @@
 
 SquareMatrix::SquareMatrix() {
     // Construct an empty matrix
-    values = vector< vector<float> >();
+    values = std::vector< std::vector<float> >();
 }
 
 SquareMatrix::SquareMatrix(int width) : SquareMatrix() {
     // Construct a matrix with given values
     for (int r = 0; r < width; ++r) {
-        vector<float> row = vector<float>();
+        std::vector<float> row = std::vector<float>();
         for (int c = 0; c < width; ++c) {
             row.push_back(0.0f);
         }
@@ -25,12 +25,12 @@ SquareMatrix::SquareMatrix(vector< vector<float> > values) {
     this->values = values;
 }
 
-SquareMatrix::SquareMatrix(int width, vector<float> values) {
+SquareMatrix::SquareMatrix(int width, std::vector<float> values) {
     // Construct a matrix of given size populated with given values
     assert(sqrt(values.size()) == width);
-    vector< vector<float> > splitValues;
+    std::vector< std::vector<float> > splitValues;
     for(int i = 0; i < width; ++i) {
-        splitValues.push_back(vector<float>(values.begin() + i*width, values.begin() + (i+1)*width));
+        splitValues.push_back(std::vector<float>(values.begin() + i*width, values.begin() + (i+1)*width));
     }
     this->values = splitValues;
 }
@@ -53,58 +53,66 @@ SquareMatrix::SquareMatrix(const SquareMatrix& m) : SquareMatrix(m.dimensions())
     }
 }
 
-SquareMatrix& SquareMatrix::operator=(const SquareMatrix& m) {
-    this->values = m.values;
+SquareMatrix& SquareMatrix::operator=(SquareMatrix m) {
+    swap(*this, m);
     return *this;
 }
 
-SquareMatrix SquareMatrix::applyComponentWiseOperation(auto operation) const {
-    SquareMatrix m = SquareMatrix(*this);
+void SquareMatrix::applyComponentWiseOperation(auto operation) {
+    using std::swap;
+    auto m = SquareMatrix(*this);
     for (int row = 0; row < dimensions(); ++row) {
         for (int column = 0; column < dimensions(); ++column) {
             m(row,column) = operation(row, column);
         }
     }
-    return m;
+    swap(*this, m);
 }
 
 SquareMatrix SquareMatrix::operator-() const {
     // Matrix negation
     auto negate = [&] (int i, int j) {return -values[i][j];};
-    return applyComponentWiseOperation(negate);
+    SquareMatrix m = SquareMatrix(*this);
+    m.applyComponentWiseOperation(negate);
+    return m;
 }
 
-SquareMatrix SquareMatrix::operator+(const SquareMatrix& m) const {
+SquareMatrix& SquareMatrix::operator+=(const SquareMatrix& m) {
     // Matrix addition
     assert(dimensions() == m.dimensions());
     auto add = [&] (int i, int j) {return values[i][j] + m(i,j);};
-    return applyComponentWiseOperation(add);
+    applyComponentWiseOperation(add);
+    return *this;
 }
 
-SquareMatrix SquareMatrix::operator-(const SquareMatrix& m) const {
+SquareMatrix& SquareMatrix::operator-=(const SquareMatrix& m) {
     // Matrix subtraction
     assert(dimensions() == m.dimensions());
     auto subtract = [&] (int i, int j) {return values[i][j] - m(i,j);};
-    return applyComponentWiseOperation(subtract);
+    applyComponentWiseOperation(subtract);
+    return *this;
 }
 
-SquareMatrix SquareMatrix::operator*(float scalar) const {
+SquareMatrix& SquareMatrix::operator*=(float scalar) {
     // Multiplication by scalar
     auto multiply = [&] (int i, int j) {return values[i][j] * scalar;};
-    return applyComponentWiseOperation(multiply);
+    applyComponentWiseOperation(multiply);
+    return *this;
 }
 
-SquareMatrix SquareMatrix::operator/(float scalar) const {
+SquareMatrix& SquareMatrix::operator/=(float scalar) {
     // Division by scalar
     auto divide = [&] (int i, int j) {return values[i][j] / scalar;};
-    return applyComponentWiseOperation(divide);
+    applyComponentWiseOperation(divide);
+    return *this;
 }
 
-SquareMatrix SquareMatrix::operator*(const SquareMatrix& m) const {
+SquareMatrix& SquareMatrix::operator*=(const SquareMatrix& m) {
     // Multiplication by matrix
     assert(dimensions() == m.dimensions());    
-    auto multiply = [&] (int i, int j) {return Vector::dot(row(i),m.column(j));};
-    return applyComponentWiseOperation(multiply);
+    auto multiply = [&] (int i, int j) {return dot(row(i),m.column(j));};
+    applyComponentWiseOperation(multiply);
+    return *this;
 }
 
 Vector SquareMatrix::operator*(const Vector& v) const {
@@ -112,7 +120,7 @@ Vector SquareMatrix::operator*(const Vector& v) const {
     assert(dimensions() == v.dimensions());
     Vector product = Vector(v);
     for(int i = 0; i < v.dimensions(); ++i) {
-        product[i] = Vector::dot(this->row(i), v);
+        product[i] = dot(this->row(i), v);
     }
     return product;
 }
@@ -120,7 +128,9 @@ Vector SquareMatrix::operator*(const Vector& v) const {
 SquareMatrix SquareMatrix::transpose() const {
     // Matrix transpose
     auto transpose = [&] (int i, int j) {return values[j][i];};
-    return applyComponentWiseOperation(transpose);
+    auto m = SquareMatrix(*this);
+    m.applyComponentWiseOperation(transpose);
+    return m;
 }
 
 // Helper functions to help calculate determinant and inverse.
@@ -225,8 +235,4 @@ float& SquareMatrix::operator()(int row, int column) {
 float SquareMatrix::operator()(int row, int column) const {
     // Element access
     return values[row][column];
-}
-
-SquareMatrix operator*(float f, const SquareMatrix& m) {
-    return m*f;
 }

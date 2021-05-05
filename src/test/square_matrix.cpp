@@ -6,7 +6,7 @@
 SCENARIO("A square matrix can be transposed","[square_matrix]") {
 
     GIVEN("A square matrix M") {
-        SquareMatrix M(3, vector<float>({
+        SquareMatrix M(3, std::vector<float>({
             3.23f, 4.54f, 29.3f,
             2.33f, 328.3f, 23.339f,
             9.0f, 23.2f, 299.12f
@@ -33,7 +33,7 @@ SCENARIO("A square matrix can be transposed","[square_matrix]") {
 SCENARIO("A square matrix can be multiplied by a scalar","[square_matrix]") {
 
     GIVEN("A square matrix M and a scalar s") {
-        SquareMatrix M(3, vector<float>({
+        SquareMatrix M(3, std::vector<float>({
             3.23f, 4.54f, 29.3f,
             2.33f, 328.3f, 23.339f,
             9.0f, 23.2f, 299.12f
@@ -75,14 +75,14 @@ SCENARIO("A square matrix can be multiplied by a scalar","[square_matrix]") {
 }
 
 SCENARIO("A square matrix M can be added to or subtracted from another matrix","[square_matrix]") {
-    SquareMatrix M(3, vector<float>({
+    SquareMatrix M(3, std::vector<float>({
         3.23f, 4.54f, 29.3f,
         2.33f, 328.3f, 23.339f,
         9.0f, 23.2f, 299.12f
     }));
 
     GIVEN("Another square matrix N") {
-        SquareMatrix N(3, vector<float>({
+        SquareMatrix N(3, std::vector<float>({
             0.0f, 1.1f, 2.2f,
             2.33f, 7.43f, 0.0f,
             9.0f, 0.0f, 2.9f
@@ -155,14 +155,14 @@ SCENARIO("A square matrix M can be added to or subtracted from another matrix","
 }
 
 SCENARIO("A square matrix M can be multiplied by another matrix","[square_matrix]") {
-    SquareMatrix M(3, vector<float>({
+    SquareMatrix M(3, std::vector<float>({
         3.23f, 4.54f, 29.3f,
         2.33f, 328.3f, 23.339f,
         9.0f, 23.2f, 299.12f
     }));
 
     GIVEN("Another square matrix N") {
-        SquareMatrix N(3, vector<float>({
+        SquareMatrix N(3, std::vector<float>({
             0.0f, 1.1f, 2.2f,
             2.33f, 7.43f, 0.0f,
             9.0f, 0.0f, 2.9f
@@ -239,14 +239,14 @@ SCENARIO("A square matrix M can be multiplied by another matrix","[square_matrix
 }
 
 SCENARIO("A square matrix M can be multiplied by a vector","[square_matrix]") {
-    SquareMatrix M(3, vector<float>({
+    SquareMatrix M(3, std::vector<float>({
         3.23f, 4.54f, 29.3f,
         2.33f, 328.3f, 23.339f,
         9.0f, 23.2f, 299.12f
     }));
 
     GIVEN("A vector V") {
-        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values);
 
         WHEN("M is multiplied by V") {
@@ -264,7 +264,7 @@ SCENARIO("A square matrix M can be multiplied by a vector","[square_matrix]") {
 SCENARIO("A square matrix can be inverted","[square_matrix]") {
     
     GIVEN("A square matrix M") {
-        SquareMatrix M(3, vector<float>({
+        SquareMatrix M(3, std::vector<float>({
             3.23f, 4.54f, 29.3f,
             2.33f, 328.3f, 23.339f,
             9.0f, 23.2f, 299.12f
@@ -309,7 +309,7 @@ SCENARIO("A square matrix can be inverted","[square_matrix]") {
 SCENARIO("A square matrix has a determinant","[square_matrix]") {
     
     GIVEN("A square matrix M") {
-        SquareMatrix M(3, vector<float>({
+        SquareMatrix M(3, std::vector<float>({
             3.23f, 4.54f, 29.3f,
             2.33f, 328.3f, 23.339f,
             9.0f, 23.2f, 299.12f

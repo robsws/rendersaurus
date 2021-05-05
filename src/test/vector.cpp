@@ -6,7 +6,7 @@ SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
     float s = 5.693f;    
 
     GIVEN("A standard vector V of float values") {
-        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values);
         REQUIRE(V.dimensions() == 3);
 
@@ -32,7 +32,7 @@ SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
     }
 
     GIVEN("A zero vector Z") {
-        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        std::vector<float> zero_values = {0.0f, 0.0f, 0.0f};
         Vector Z(zero_values);
         REQUIRE(Z.dimensions() == 3);
 
@@ -61,7 +61,7 @@ SCENARIO("Vectors can be multiplied by a scalar s", "[vector]") {
 SCENARIO("Scalar-vector multiplication is associative", "[vector]") {
 
     GIVEN("A vector V and two scalars {s,t}") {
-        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values);
         float s = 38.343f;
         float t = 95.342f;
@@ -82,7 +82,7 @@ SCENARIO("Scalar-vector multiplication is associative", "[vector]") {
 SCENARIO("Vectors can be negated", "[vector]") {
 
     GIVEN("A standard vector V of float values") {
-        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values);
         REQUIRE(V.dimensions() == 3);
 
@@ -98,7 +98,7 @@ SCENARIO("Vectors can be negated", "[vector]") {
     }
 
     GIVEN("A zero vector Z") {
-        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        std::vector<float> zero_values = {0.0f, 0.0f, 0.0f};
         Vector Z(zero_values);
         REQUIRE(Z.dimensions() == 3);
 
@@ -117,9 +117,9 @@ SCENARIO("Vectors can be negated", "[vector]") {
 SCENARIO("Vectors can be added and subtracted from each other", "[vector]") {
 
     GIVEN("Two vectors {V, W}") {
-        vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values1);
-        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        std::vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
         Vector W(ordinary_values2);
 
         WHEN("V + W") {
@@ -147,9 +147,9 @@ SCENARIO("Vectors can be added and subtracted from each other", "[vector]") {
 SCENARIO("Vector addition is commutative", "[vector]") {
 
     GIVEN("Two vectors {V, W}") {
-        vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values1);
-        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        std::vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
         Vector W(ordinary_values2);
 
         WHEN("V + W") {
@@ -168,9 +168,9 @@ SCENARIO("Vector addition is commutative", "[vector]") {
 SCENARIO("Scalar-vector multiplication is distributive across addition and subtraction", "[vector]") {
 
     GIVEN("Two vectors {V,W} and a scalar s") {
-        vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values1);
-        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        std::vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
         Vector W(ordinary_values2);
         float s = 38.343f;
 
@@ -200,7 +200,7 @@ SCENARIO("Scalar-vector multiplication is distributive across addition and subtr
 
 SCENARIO("Vector magnitude (length) can be calculated", "[vector]") {
     GIVEN("A standard vector V of float values") {
-        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values);
 
         WHEN("Magnitude m of V is calculated") {
@@ -213,7 +213,7 @@ SCENARIO("Vector magnitude (length) can be calculated", "[vector]") {
     }
 
     GIVEN("A zero vector Z") {
-        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        std::vector<float> zero_values = {0.0f, 0.0f, 0.0f};
         Vector Z(zero_values);
         REQUIRE(Z.dimensions() == 3);
 
@@ -229,7 +229,7 @@ SCENARIO("Vector magnitude (length) can be calculated", "[vector]") {
 
 SCENARIO("A vector can be normalised to have unit length 1", "[vector]") {
     GIVEN("A standard vector V of float values") {
-        vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
+        std::vector<float> ordinary_values = {2.453f, 4.234f, 3.098f};
         Vector V(ordinary_values);
 
         WHEN("V is normalised") {
@@ -244,7 +244,7 @@ SCENARIO("A vector can be normalised to have unit length 1", "[vector]") {
     }
 
     GIVEN("A zero vector Z") {
-        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        std::vector<float> zero_values = {0.0f, 0.0f, 0.0f};
         Vector Z(zero_values);
 
         WHEN("Z is normalised") {
@@ -260,11 +260,11 @@ SCENARIO("A vector can be normalised to have unit length 1", "[vector]") {
 }
 
 SCENARIO("Dot product can be calculated between a vector V and another vector", "[vector]") {
-    vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+    std::vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
     Vector V(ordinary_values1);
 
     GIVEN("Another vector W") {
-        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        std::vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
         Vector W(ordinary_values2);
 
         WHEN("The dot product of V with W is taken") {
@@ -282,7 +282,7 @@ SCENARIO("Dot product can be calculated between a vector V and another vector", 
     }
 
     GIVEN("A zero vector Z") {
-        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        std::vector<float> zero_values = {0.0f, 0.0f, 0.0f};
         Vector Z(zero_values);
 
         WHEN("The dot product of V with Z is taken") {
@@ -307,11 +307,11 @@ SCENARIO("Dot product can be calculated between a vector V and another vector", 
 }
 
 SCENARIO("Cross product can be calculated between a vector V and another vector", "[vector]") {
-    vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+    std::vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
     Vector V(ordinary_values1);
     
     GIVEN("Another vector W") {
-        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        std::vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
         Vector W(ordinary_values2);
 
         WHEN("The cross product of V with W is taken") {
@@ -341,11 +341,11 @@ SCENARIO("Cross product can be calculated between a vector V and another vector"
 }
 
 SCENARIO("A vector V can be projected onto another vector", "[vector]") {
-    vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
+    std::vector<float> ordinary_values1 = {2.453f, 4.234f, 3.098f};
     Vector V(ordinary_values1);
     
     GIVEN("Another vector W") {
-        vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
+        std::vector<float> ordinary_values2 = {35.324f, 2.922f, 82.829f};
         Vector W(ordinary_values2);
 
         WHEN("V is projected onto W") {
@@ -361,7 +361,7 @@ SCENARIO("A vector V can be projected onto another vector", "[vector]") {
     }
 
     GIVEN("A zero vector Z") {
-        vector<float> zero_values = {0.0f, 0.0f, 0.0f};
+        std::vector<float> zero_values = {0.0f, 0.0f, 0.0f};
         Vector Z(zero_values);
 
         WHEN("V is projected onto Z") {

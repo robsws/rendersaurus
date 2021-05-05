@@ -5,16 +5,16 @@
 
 class Rendersaurus {
     public:
-        Rendersaurus(unique_ptr<Display> displayPtr, shared_ptr<Shader> shaderPtr);
+        Rendersaurus(std::unique_ptr<Display> displayPtr, std::shared_ptr<Shader> shaderPtr);
         ~Rendersaurus();
         void initialise();
-        void addObject(shared_ptr<const Object3D> objectPtr);
-        void refresh();
+        void addObject(std::shared_ptr<const Object3D> objectPtr);
+        int refresh();
     private:
         Camera camera;
         Scene scene;
-        unique_ptr<Display> displayPtr;
-        shared_ptr<Shader> shaderPtr;
-        shared_ptr<FragmentBuffer> fragmentBufferPtr;
+        std::unique_ptr<Display> displayPtr;
+        std::shared_ptr<Shader> shaderPtr;
+        std::shared_ptr<FragmentBuffer> fragmentBufferPtr;
         bool initialised;
 };

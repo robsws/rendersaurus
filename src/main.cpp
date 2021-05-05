@@ -13,21 +13,19 @@
 #include "fragment_buffer.h"
 #include <vector>
 #include <iostream>
+#include <iomanip>
 #include <stdlib.h>
 #include <memory>
 
-using namespace std;
-
-unique_ptr<Display> getDisplay(int width, int height) {
-    auto fragmentBufferPtr = make_shared<FragmentBuffer>(width, height);
+std::unique_ptr<Display> getDisplay(int width, int height) {
     #ifdef _WIN32
-        return make_unique<GdiDisplay>(GdiDisplay(width, height, 4, fragmentBufferPtr));
+        return make_unique<GdiDisplay>(GdiDisplay(width, height, 1));
     #else
-        return make_unique<XtermDisplay>(XtermDisplay(width, height, fragmentBufferPtr));
+        return make_unique<XtermDisplay>(XtermDisplay(width, height));
     #endif
 }
 
-shared_ptr<Object3D> createCube(Vector position, shared_ptr<Shader> shaderPtr) {
+std::shared_ptr<Object3D> createCube(Vector position, std::shared_ptr<Shader> shaderPtr) {
     // 8 vertices in total, some can be reused
     // Vertex a(Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0));
     // Vertex b(Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0));
@@ -38,45 +36,45 @@ shared_ptr<Object3D> createCube(Vector position, shared_ptr<Shader> shaderPtr) {
     // Vertex g(Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(255,0,0));
     // Vertex h(Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(255,0,0));
     // each face with it's own vertices for debugging
-    Vertex f1a(Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0));
-    Vertex f1b(Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0));
-    Vertex f1c(Vector(vector<float>({-0.5f,0.5f,-0.5f,1.0f})), Colour(255,0,0));
-    Vertex f1d(Vector(vector<float>({0.5f,0.5f,-0.5f,1.0f})), Colour(255,0,0));
-    Vertex f2a(Vector(vector<float>({-0.5f,0.5f,-0.5f,1.0f})), Colour(255,255,0));
-    Vertex f2b(Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(255,255,0));
-    Vertex f2c(Vector(vector<float>({0.5f,0.5f,-0.5f,1.0f})), Colour(255,255,0));
-    Vertex f2d(Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(255,255,0));
-    Vertex f3a(Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(0,255,0));
-    Vertex f3b(Vector(vector<float>({0.5f,-0.5f,0.5f,1.0f})), Colour(0,255,0));
-    Vertex f3c(Vector(vector<float>({0.5f,0.5f,-0.5f,1.0f})), Colour(0,255,0));
-    Vertex f3d(Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(0,255,0));
-    Vertex f4a(Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(0,0,255));
-    Vertex f4b(Vector(vector<float>({-0.5f,-0.5f,0.5f,1.0f})), Colour(0,0,255));
-    Vertex f4c(Vector(vector<float>({-0.5f,0.5f,-0.5f,1.0f})), Colour(0,0,255));
-    Vertex f4d(Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(0,0,255));
-    Vertex f5a(Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,255));
-    Vertex f5b(Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,255));
-    Vertex f5c(Vector(vector<float>({-0.5f,-0.5f,0.5f,1.0f})), Colour(255,0,255));
-    Vertex f5d(Vector(vector<float>({0.5f,-0.5f,0.5f,1.0f})), Colour(255,0,255));
-    Vertex f6a(Vector(vector<float>({-0.5f,-0.5f,0.5f,1.0f})), Colour(255,255,255));
-    Vertex f6b(Vector(vector<float>({0.5f,-0.5f,0.5f,1.0f})), Colour(255,255,255));
-    Vertex f6c(Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(255,255,255));
-    Vertex f6d(Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(255,255,255));
+    Vertex f1a = { Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0) };
+    Vertex f1b = { Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,0) };
+    Vertex f1c = { Vector(vector<float>({-0.5f,0.5f,-0.5f,1.0f})), Colour(255,0,0) };
+    Vertex f1d = { Vector(vector<float>({0.5f,0.5f,-0.5f,1.0f})), Colour(255,0,0) };
+    Vertex f2a = { Vector(vector<float>({-0.5f,0.5f,-0.5f,1.0f})), Colour(255,255,0) };
+    Vertex f2b = { Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(255,255,0) };
+    Vertex f2c = { Vector(vector<float>({0.5f,0.5f,-0.5f,1.0f})), Colour(255,255,0) };
+    Vertex f2d = { Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(255,255,0) };
+    Vertex f3a = { Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(0,255,0) };
+    Vertex f3b = { Vector(vector<float>({0.5f,-0.5f,0.5f,1.0f})), Colour(0,255,0) };
+    Vertex f3c = { Vector(vector<float>({0.5f,0.5f,-0.5f,1.0f})), Colour(0,255,0) };
+    Vertex f3d = { Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(0,255,0) };
+    Vertex f4a = { Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(0,0,255) };
+    Vertex f4b = { Vector(vector<float>({-0.5f,-0.5f,0.5f,1.0f})), Colour(0,0,255) };
+    Vertex f4c = { Vector(vector<float>({-0.5f,0.5f,-0.5f,1.0f})), Colour(0,0,255) };
+    Vertex f4d = { Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(0,0,255) };
+    Vertex f5a = { Vector(vector<float>({-0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,255) };
+    Vertex f5b = { Vector(vector<float>({0.5f,-0.5f,-0.5f,1.0f})), Colour(255,0,255) };
+    Vertex f5c = { Vector(vector<float>({-0.5f,-0.5f,0.5f,1.0f})), Colour(255,0,255) };
+    Vertex f5d = { Vector(vector<float>({0.5f,-0.5f,0.5f,1.0f})), Colour(255,0,255) };
+    Vertex f6a = { Vector(vector<float>({-0.5f,-0.5f,0.5f,1.0f})), Colour(255,255,255) };
+    Vertex f6b = { Vector(vector<float>({0.5f,-0.5f,0.5f,1.0f})), Colour(255,255,255) };
+    Vertex f6c = { Vector(vector<float>({-0.5f,0.5f,0.5f,1.0f})), Colour(255,255,255) };
+    Vertex f6d = { Vector(vector<float>({0.5f,0.5f,0.5f,1.0f})), Colour(255,255,255) };
     // create triangles from the vertices
     // 6 faces x 2 triangles per face
-    vector<Triangle3D> triangles;
-    triangles.push_back(Triangle3D(f1a, f1b, f1c));
-    triangles.push_back(Triangle3D(f1b, f1c, f1d));
-    triangles.push_back(Triangle3D(f2a, f2b, f2c));
-    triangles.push_back(Triangle3D(f2b, f2c, f2d));
-    triangles.push_back(Triangle3D(f3a, f3b, f3c));
-    triangles.push_back(Triangle3D(f3b, f3c, f3d));
-    triangles.push_back(Triangle3D(f4a, f4b, f4c));
-    triangles.push_back(Triangle3D(f4b, f4c, f4d));
-    triangles.push_back(Triangle3D(f5a, f5b, f5c));
-    triangles.push_back(Triangle3D(f5b, f5c, f5d));
-    triangles.push_back(Triangle3D(f6a, f6b, f6c));
-    triangles.push_back(Triangle3D(f6b, f6c, f6d));
+    std::vector<Triangle3D> triangles;
+    triangles.push_back({f1a, f1b, f1c});
+    triangles.push_back({f1b, f1c, f1d});
+    triangles.push_back({f2a, f2b, f2c});
+    triangles.push_back({f2b, f2c, f2d});
+    triangles.push_back({f3a, f3b, f3c});
+    triangles.push_back({f3b, f3c, f3d});
+    triangles.push_back({f4a, f4b, f4c});
+    triangles.push_back({f4b, f4c, f4d});
+    triangles.push_back({f5a, f5b, f5c});
+    triangles.push_back({f5b, f5c, f5d});
+    triangles.push_back({f6a, f6b, f6c});
+    triangles.push_back({f6b, f6c, f6d});
     // triangles.push_back(Triangle3D(b, d, f));
     // triangles.push_back(Triangle3D(f, d, h));
     // triangles.push_back(Triangle3D(a, c, e));
@@ -102,17 +100,18 @@ int main(int argc, char **argv)
     int width = atoi(argv[1]);
     int height = atoi(argv[2]);
 
-    unique_ptr<Display> displayPtr = getDisplay(width, height);
-    shared_ptr<Shader> shaderPtr = make_shared<BasicShader>(width, height);
-    Rendersaurus rendersaurus(move(displayPtr), shaderPtr);
+    std::unique_ptr<Display> displayPtr = getDisplay(width, height);
+    std::shared_ptr<Shader> shaderPtr = std::make_shared<BasicShader>(width, height);
+    Rendersaurus rendersaurus(std::move(displayPtr), shaderPtr);
 
     // Set up the objects in the world
-    shared_ptr<Object3D> objPtr = createCube(Vector(vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
+    std::shared_ptr<Object3D> objPtr = createCube(Vector(std::vector<float>({-0.2f,2.1f,2.5f,1.0f})), shaderPtr);
     rendersaurus.addObject(objPtr);
 
-    Vector translationVector(vector<float>({0.1f,0.0f,0.0f,0.0f}));
+    Vector translationVector(std::vector<float>({0.1f,0.0f,0.0f,0.0f}));
     for(int i = 0; i < 60; ++i) {
-        rendersaurus.refresh();
+        auto fps = rendersaurus.refresh();
+        cout << fps << endl;
         objPtr->translate(translationVector);
     }
 

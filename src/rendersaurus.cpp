@@ -1,20 +1,19 @@
 #include "rendersaurus.h"
 #include <iostream>
+#include <chrono>
 
-using namespace std;
-
-Rendersaurus::Rendersaurus(unique_ptr<Display> displayPtr, shared_ptr<Shader> shaderPtr)
+Rendersaurus::Rendersaurus(std::unique_ptr<Display> displayPtr, std::shared_ptr<Shader> shaderPtr)
     : camera(
         Vector(vector<float>({-1.0f,-1.6f,0.0f,1.0f})),
         Vector(vector<float>({0.0f,0.0f,-1.0f,0.0f})),
         1.0f,
         1000.0f,
         80.0f,
-        (float)displayPtr->height / (float)displayPtr->width,
+        (float)displayPtr->getHeight() / (float)displayPtr->getWidth(),
         Projection::PERSPECTIVE
       ),
       scene(this->camera),
-      displayPtr(move(displayPtr)),
+      displayPtr(std::move(displayPtr)),
       shaderPtr(shaderPtr),
       initialised(false)
 {}
@@ -29,24 +28,32 @@ void Rendersaurus::addObject(shared_ptr<const Object3D> objectPtr) {
     this->scene.addObject(objectPtr);
 }
 
-void Rendersaurus::refresh() {
+int Rendersaurus::refresh() {
     if (!this->initialised) {
         this->initialise();
     }
+    auto start = std::chrono::high_resolution_clock::now();
     shaderPtr->setCameraTransform(camera.getCameraSpaceTransform());
     // Regenerate the fragments
-    vector<Fragment> fragments = scene.render();
+    std::vector<Fragment> fragments = scene.render();
     // Update the display
-    this->displayPtr->fragmentBufferPtr->clear();
-    this->displayPtr->fragmentBufferPtr->blendFragments(fragments);
+    this->displayPtr->clear();
+    this->displayPtr->blend(fragments);
     this->displayPtr->refresh();
+    auto stop = std::chrono::high_resolution_clock::now();
+    // Calculate FPS
+    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
+    if (duration == 0) {
+        duration = 1;
+    }
+    return 1000000000/duration;
 }
 
 Rendersaurus::~Rendersaurus() {
     try {
         displayPtr->finish();
     } catch(...) {
-        cerr << "Display threw exception while destroying. Terminating." << endl;
+        std::cerr << "Display threw exception while destroying. Terminating." << std::endl;
         abort();
     }
 }

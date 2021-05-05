@@ -1,27 +1,41 @@
 #include "colour.h"
 
 Colour::Colour() :
-    red(0.0f), green(0.0f), blue(0.0f) {
+    r(0.0f), g(0.0f), b(0.0f) {
 }
 
 Colour::Colour(float red, float green, float blue) :
-    red(red), green(green), blue(blue) {
+    r(red), g(green), b(blue) {
 }
 
-Colour Colour::operator*(float scalar) const {
-    return Colour(scalar * red, scalar * green, scalar * blue);
+Colour& Colour::operator=(Colour colour) {
+    swap(*this, colour);
+    return *this;
 }
 
-Colour Colour::operator*(const Colour& colour) const {
-    return Colour(colour.red * red, colour.green * green, colour.blue * blue);
+Colour& Colour::operator*=(const Colour& colour) {
+    r *= colour.r; g *= colour.g; b *= colour.b;
+    return *this;
 }
 
-Colour Colour::operator+(const Colour& colour) const {
-    return Colour(colour.red + red, colour.green + green, colour.blue + blue);
+Colour& Colour::operator*=(float scalar) {
+    r *= scalar; g *= scalar; b *= scalar;
+    return *this;
 }
 
-void Colour::set(const Colour& colour) {
-    red = colour.red;
-    green = colour.green;
-    blue = colour.blue;
+Colour& Colour::operator+=(const Colour& colour) {
+    r += colour.r; g += colour.g; b += colour.b;
+    return *this;
+}
+
+float Colour::getR() const {
+    return r;
+}
+
+float Colour::getG() const {
+    return g;
+}
+
+float Colour::getB() const {
+    return b;
 }

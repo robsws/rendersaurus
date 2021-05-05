@@ -1,10 +1,8 @@
 #include "gdi_display.h"
 #include <windows.h>
 
-using namespace std;
-
-GdiDisplay::GdiDisplay(int width, int height, int scale, shared_ptr<FragmentBuffer> fragmentBufferPtr)
-    : Display(width, height, fragmentBufferPtr), scale(scale) {
+GdiDisplay::GdiDisplay(int width, int height, int scale)
+    : Display(width, height), scale(scale) {
 }
 
 bool GdiDisplay::initialise() {
@@ -18,7 +16,7 @@ bool GdiDisplay::initialise() {
 bool GdiDisplay::refresh() {
     for(int y = 0; y < height; ++y) {
         for(int x = 0; x < width; ++x) {
-            auto colour = fragmentBufferPtr->get(x,y);
+            auto colour = fragmentBuffer.get(x,y);
             drawPixel(x, y, colour);
         }
     }
@@ -33,7 +31,7 @@ bool GdiDisplay::finish() {
 void GdiDisplay::drawPixel(int x, int y, Colour colour) {
     for (int x1 = x*scale; x1 < x*scale+scale; ++x1) {
         for (int y1 = y*scale; y1 < y*scale+scale; ++y1) {
-            SetPixel(mdc, x1, y1, RGB(colour.red, colour.blue, colour.green));
+            SetPixelV(mdc, x1, y1, RGB(colour.getR(), colour.getB(), colour.getG()));
         }
     }
 }

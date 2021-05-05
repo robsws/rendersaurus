@@ -1,6 +1,7 @@
 #pragma once
 
 #include "coord.h"
+#include <vector>
 
 class Vector;
 
@@ -9,7 +10,7 @@ class Triangle2D {
     // of integer coordinates representing pixel positions on the display.
     public:
         Triangle2D(Coord a, Coord b, Coord c);
-        vector<Coord> rasterize() const;
+        std::vector<Coord> rasterize() const;
         Vector getBarycentricCoords(Coord point) const;
     private:
         bool pointWithinTriangle(Coord point) const;

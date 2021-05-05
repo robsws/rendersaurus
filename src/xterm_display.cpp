@@ -6,8 +6,8 @@
 
 using namespace std;
 
-XtermDisplay::XtermDisplay(int width, int height, shared_ptr<FragmentBuffer> fragmentBufferPtr)
-    : Display(width, height, fragmentBufferPtr) {
+XtermDisplay::XtermDisplay(int width, int height)
+    : Display(width, height) {
 }
 
 bool XtermDisplay::initialise() {
@@ -49,9 +49,9 @@ int getColourIndex(float colourComponent) {
 }
 
 int convertRgbTo256(const Colour& colour) {
-    int redIndex = getColourIndex(colour.red);
-    int greenIndex = getColourIndex(colour.green);
-    int blueIndex = getColourIndex(colour.blue);
+    int redIndex = getColourIndex(colour.getR());
+    int greenIndex = getColourIndex(colour.getG());
+    int blueIndex = getColourIndex(colour.getB());
     return 17 + redIndex*36 + greenIndex*6 + blueIndex;
 }
 
@@ -59,7 +59,7 @@ bool XtermDisplay::refresh() {
     wmove(ncursesWindow,0,0);
     for(int y = 0; y < height; ++y) {
         for(int x = 0; x < width; ++x) {
-            Fragment fragment = fragmentBufferPtr->get(x, y);
+            Fragment fragment = fragmentBuffer.get(x, y);
             // Convert RGB colour to xterm 256 index
             int colour = convertRgbTo256(fragment);
             wattron(ncursesWindow, COLOR_PAIR(colour));

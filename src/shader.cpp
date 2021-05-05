@@ -12,7 +12,7 @@ namespace {
         // triangle.
         Vector barycentricCoords = windowSpaceTriangle.getBarycentricCoords(position);
         // Create a new vertex containing the averaged attributes.
-        Vector interpolatedPosition(vector<float>({
+        Vector interpolatedPosition(std::vector<float>({
             // x coordinate
             barycentricCoords[0] * clipSpaceTriangle.a.position[0] +
             barycentricCoords[1] * clipSpaceTriangle.b.position[0] +
@@ -30,19 +30,19 @@ namespace {
         }));
         Colour interpolatedColour(
             // red component
-            barycentricCoords[0] * clipSpaceTriangle.a.colour.red +
-            barycentricCoords[1] * clipSpaceTriangle.b.colour.red +
-            barycentricCoords[2] * clipSpaceTriangle.c.colour.red,
+            barycentricCoords[0] * clipSpaceTriangle.a.colour.getR() +
+            barycentricCoords[1] * clipSpaceTriangle.b.colour.getR() +
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.getR(),
             // green component
-            barycentricCoords[0] * clipSpaceTriangle.a.colour.green +
-            barycentricCoords[1] * clipSpaceTriangle.b.colour.green +
-            barycentricCoords[2] * clipSpaceTriangle.c.colour.green,
+            barycentricCoords[0] * clipSpaceTriangle.a.colour.getG() +
+            barycentricCoords[1] * clipSpaceTriangle.b.colour.getG() +
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.getG(),
             // blue component
-            barycentricCoords[0] * clipSpaceTriangle.a.colour.blue +
-            barycentricCoords[1] * clipSpaceTriangle.b.colour.blue +
-            barycentricCoords[2] * clipSpaceTriangle.c.colour.blue
+            barycentricCoords[0] * clipSpaceTriangle.a.colour.getB() +
+            barycentricCoords[1] * clipSpaceTriangle.b.colour.getB() +
+            barycentricCoords[2] * clipSpaceTriangle.c.colour.getB()
         );
-        return Vertex(interpolatedPosition, interpolatedColour);
+        return {interpolatedPosition, interpolatedColour};
     }
 }
 
@@ -61,10 +61,10 @@ vector<Fragment> Shader::generateFragments(const Triangle3D& triangle) const {
     Coord cDisplayPos = clipSpaceToWindowSpace(c.position);
     Triangle2D projectedTriangle(aDisplayPos, bDisplayPos, cDisplayPos);
     // Rasterization (split triangle into digital pixels)
-    vector<Coord> pixelLocations = projectedTriangle.rasterize();
+    std::vector<Coord> pixelLocations = projectedTriangle.rasterize();
     // For each pixel inside triangle, interpolate attributes and calculate the
     // fragment colour.
-    vector<Fragment> fragments;
+    std::vector<Fragment> fragments;
     for (Coord pixel : pixelLocations) {
         Vertex interpolatedAttributes = interpolateVertexAttributes(triangle, projectedTriangle, pixel);
         // Only fragments from inside the screen get rendered.
@@ -94,9 +94,8 @@ Coord Shader::clipSpaceToWindowSpace(const Vector& position) const {
     // The z coordinate can be ignored.
     // The w coordinate can be used for doing depth interpolation as it contains
     // the original z of the vertex negated.
-    Coord windowSpaceCoord(
-        ((position[0]+1)/2)*windowWidth,
-        ((position[1]+1)/2)*windowHeight
-    );
-    return windowSpaceCoord;
+    return {
+        static_cast<int>(((position[0]+1)/2)*windowWidth),
+        static_cast<int>(((position[1]+1)/2)*windowHeight)
+    };
 }
