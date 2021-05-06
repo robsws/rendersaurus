@@ -22,6 +22,7 @@ void Rendersaurus::initialise() {
     // Cannot be called from within constructor due to call on virtual Display functions
     this->shaderPtr->setProjectionTransform(camera.getClipSpaceTransform());
     this->displayPtr->initialise();
+    this->initialised = true;
 }
 
 void Rendersaurus::addObject(shared_ptr<const Object3D> objectPtr) {
