@@ -14,6 +14,8 @@ class SquareMatrix {
         SquareMatrix();
         // Construct a zero square matrix with given size
         SquareMatrix(int width);
+        // Construct a square matrix with all values set to given value
+        SquareMatrix(int width, float initValue);
         // Construct a matrix with given 2D vector
         SquareMatrix(std::vector< std::vector<float> > values);
         // Construct a matrix of given width populated with given values

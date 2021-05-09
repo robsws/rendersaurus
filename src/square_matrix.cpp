@@ -5,43 +5,35 @@
 #include <iostream>
 
 SquareMatrix::SquareMatrix() {
-    // Construct an empty matrix
-    values = std::vector< std::vector<float> >();
+
 }
 
-SquareMatrix::SquareMatrix(int width) : SquareMatrix() {
-    // Construct a matrix with given values
-    for (int r = 0; r < width; ++r) {
-        std::vector<float> row = std::vector<float>();
-        for (int c = 0; c < width; ++c) {
-            row.push_back(0.0f);
-        }
-        values.push_back(row);
-    }
+SquareMatrix::SquareMatrix(int width) : 
+    values(width, std::vector<float>(width, 0.0f)){
 }
 
-SquareMatrix::SquareMatrix(vector< vector<float> > values) {
+SquareMatrix::SquareMatrix(int width, float initValue) : 
+    values(width, std::vector<float>(width, initValue)){
+}
+
+SquareMatrix::SquareMatrix(vector< vector<float> > values) :
+    values(values) {
     // Construct a matrix with given 2D vector
-    this->values = values;
 }
 
 SquareMatrix::SquareMatrix(int width, std::vector<float> values) {
     // Construct a matrix of given size populated with given values
     assert(sqrt(values.size()) == width);
-    std::vector< std::vector<float> > splitValues;
+    std::vector< std::vector<float> > splitValues(width);
     for(int i = 0; i < width; ++i) {
-        splitValues.push_back(std::vector<float>(values.begin() + i*width, values.begin() + (i+1)*width));
+        splitValues[i] = std::vector<float>(values.begin() + i*width, values.begin() + (i+1)*width);
     }
     this->values = splitValues;
 }
 
 SquareMatrix SquareMatrix::identity(int width) {
     // Construct the identity matrix of given size
-    SquareMatrix m = SquareMatrix(width);
-    for (int i = 0; i < width; ++i) {
-        m(i,i) = 1;
-    }
-    return m;
+    return SquareMatrix(width, 1.0f);
 }
 
 SquareMatrix::SquareMatrix(const SquareMatrix& m) : SquareMatrix(m.dimensions()) {
