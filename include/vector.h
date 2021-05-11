@@ -46,7 +46,8 @@ class Vector {
             swap(first.values, second.values);
         }
     private:
-        void applyComponentWiseOperation(auto operation);
+		template <typename F>
+		void applyComponentWiseOperation(F operation);
         std::vector<float> values;
 };
 

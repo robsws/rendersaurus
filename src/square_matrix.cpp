@@ -50,7 +50,8 @@ SquareMatrix& SquareMatrix::operator=(SquareMatrix m) {
     return *this;
 }
 
-void SquareMatrix::applyComponentWiseOperation(auto operation) {
+template <typename F>
+void SquareMatrix::applyComponentWiseOperation(F operation) {
     using std::swap;
     auto m = SquareMatrix(*this);
     for (int row = 0; row < dimensions(); ++row) {

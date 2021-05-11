@@ -4,8 +4,6 @@
 #include "square_matrix.h"
 #include <algorithm>
 
-using namespace std;
-
 namespace {
     bool pointOnSameSide(Coord point1, Coord point2, Coord vertexA, Coord vertexB) {
         Vector aTo1(std::vector<float>({(float)(point1.x-vertexA.x), (float)(point1.y-vertexA.y), 1}));

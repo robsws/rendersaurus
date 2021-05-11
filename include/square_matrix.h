@@ -58,7 +58,8 @@ class SquareMatrix {
         }
     private:
         // Apply an operation to every element of the matrix
-        void applyComponentWiseOperation(auto operation);
+		template <typename F>
+        void applyComponentWiseOperation(F operation);
         // Return the matrix given by removing row i and column j
         SquareMatrix subMatrix(int i, int j) const;
         // Calculate the determinant recursively without using the cofactor matrix

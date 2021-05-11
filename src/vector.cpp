@@ -26,7 +26,8 @@ Vector::Vector(const Coord& c) :
     values[1] = c.y;
 }
 
-void Vector::applyComponentWiseOperation(auto operation) {
+template <typename F>
+void Vector::applyComponentWiseOperation(F operation) {
     using std::swap;
     auto v = Vector(*this);
     for (unsigned int i = 0; i < v.values.size(); ++i) {
