@@ -21,9 +21,10 @@ Vector::Vector(const Vector& v) :
 }
 
 Vector::Vector(const Coord& c) :
-    values(2, 0) {
-    values[0] = c.x;
-    values[1] = c.y;
+	values{
+		static_cast<float>(c.x),
+		static_cast<float>(c.y)
+	} {
 }
 
 template <typename F>
@@ -88,7 +89,7 @@ float Vector::magnitude() const {
 
 int Vector::dimensions() const {
     // Get number of dimensions of vector
-    return (int)values.size();
+    return values.size();
 }
 
 float& Vector::operator[](unsigned int index) {
@@ -116,11 +117,11 @@ Vector cross(const Vector& a, const Vector& b) {
     assert(a.dimensions() == 3);
     assert(b.dimensions() == 3);
     // Use matrix transformation to get cross product
-    SquareMatrix crossTransform(a.dimensions(), std::vector<float>({
+    SquareMatrix crossTransform(a.dimensions(), {
          0.0f, -a[2],  a[1],
          a[2],  0.0f, -a[0],
         -a[1],  a[0],  0.0f
-    }));
+    });
     return crossTransform * b;
 }
 

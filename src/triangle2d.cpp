@@ -6,9 +6,21 @@
 
 namespace {
     bool pointOnSameSide(Coord point1, Coord point2, Coord vertexA, Coord vertexB) {
-        Vector aTo1(std::vector<float>({(float)(point1.x-vertexA.x), (float)(point1.y-vertexA.y), 1}));
-        Vector aTo2(std::vector<float>({(float)(point2.x-vertexA.x), (float)(point2.y-vertexA.y), 1}));
-        Vector aToB(std::vector<float>({(float)(vertexB.x-vertexA.x), (float)(vertexB.y-vertexA.y), 1}));
+        Vector aTo1({
+			static_cast<float>(point1.x-vertexA.x),
+			static_cast<float>(point1.y-vertexA.y),
+			1
+		});
+        Vector aTo2({
+			static_cast<float>(point2.x-vertexA.x),
+			static_cast<float>(point2.y-vertexA.y),
+			1
+		});
+        Vector aToB({
+			static_cast<float>(vertexB.x-vertexA.x),
+			static_cast<float>(vertexB.y-vertexA.y),
+			1
+		});
         Vector cross1(cross(aToB, aTo1));
         Vector cross2(cross(aToB, aTo2));
         return dot(cross1, cross2) >= 0;

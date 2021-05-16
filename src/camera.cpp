@@ -20,12 +20,12 @@ SquareMatrix Camera::getCameraSpaceTransform() const {
     // To get to camera space we need to perform a translation in the opposite
     // direction from the direction the camera is away from the origin.
     // TODO - encorporate direction (rotation)
-    SquareMatrix cameraTransform(4, std::vector<float>({
+    SquareMatrix cameraTransform(4, {
         1,0,0,position[0],
         0,1,0,position[1],
         0,0,1,position[2],
         0,0,0,1
-    }));
+    });
     return cameraTransform;
 }
 

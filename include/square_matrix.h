@@ -52,11 +52,15 @@ class SquareMatrix {
         float operator()(int row, int column) const;
         friend void swap(SquareMatrix& first, SquareMatrix& second) noexcept {
             using std::swap;
-            swap(first.values, second.values);
+			swap(first.width, second.width);
+			swap(first.values, second.values);
             swap(first.cofactors, second.cofactors);
             swap(first.cofactorsAreStale, second.cofactorsAreStale);
         }
     private:
+		// Get a value from the internal vector using 2D indexes
+		float getValue(int i, int j) const;
+		float& getValue(int i, int j);
         // Apply an operation to every element of the matrix
 		template <typename F>
         void applyComponentWiseOperation(F operation);
@@ -67,7 +71,9 @@ class SquareMatrix {
         // Compute the matrix of cofactors for this matrix
         void computeCofactorMatrix() const;
         // Actual elements of the matrix
-        std::vector< std::vector<float> > values;
+        std::vector<float> values;
+		// Width of matrix for convenience
+		int width;
         // Cofactor matrix
         mutable std::unique_ptr<SquareMatrix> cofactors = NULL;
         // Judge whether cofactors need to be recalculated

@@ -4,50 +4,56 @@
 #include <cmath>
 #include <iostream>
 
-SquareMatrix::SquareMatrix() {
-
+SquareMatrix::SquareMatrix() :
+	width(0),
+	values(0) {
 }
 
 SquareMatrix::SquareMatrix(int width) : 
-    values(width, std::vector<float>(width, 0.0f)){
+	width(width),
+	values(width * width, 0.0f){
 }
 
 SquareMatrix::SquareMatrix(int width, float initValue) : 
-    values(width, std::vector<float>(width, initValue)){
+	width(width),
+    values(width * width, initValue){
 }
 
-SquareMatrix::SquareMatrix(vector< vector<float> > values) :
-    values(values) {
-    // Construct a matrix with given 2D vector
-}
-
-SquareMatrix::SquareMatrix(int width, std::vector<float> values) {
+SquareMatrix::SquareMatrix(int width, std::vector<float> values) :
     // Construct a matrix of given size populated with given values
-    assert(sqrt(values.size()) == width);
-    std::vector< std::vector<float> > splitValues(width);
-    for(int i = 0; i < width; ++i) {
-        splitValues[i] = std::vector<float>(values.begin() + i*width, values.begin() + (i+1)*width);
-    }
-    this->values = splitValues;
+	width(width),
+    values(values) {
+	assert(width * width == values.size());
 }
 
-SquareMatrix SquareMatrix::identity(int width) {
+SquareMatrix SquareMatrix::identity(int width){
     // Construct the identity matrix of given size
-    return SquareMatrix(width, 1.0f);
+	SquareMatrix m(width);
+	for (int i = 0; i < width; ++i) {
+		m(i,i) = 1.0f;
+	}
+	return m;
 }
 
-SquareMatrix::SquareMatrix(const SquareMatrix& m) : SquareMatrix(m.dimensions()) {
+SquareMatrix::SquareMatrix(const SquareMatrix& m) :
+	width(m.width),
+	values(m.values) {
     // Copy constructor
-    for (int row = 0; row < m.dimensions(); ++row) {
-        for (int column = 0; column < m.dimensions(); ++column) {
-            values[row][column] = m(row,column);
-        }
-    }
 }
 
 SquareMatrix& SquareMatrix::operator=(SquareMatrix m) {
     swap(*this, m);
     return *this;
+}
+
+float SquareMatrix::getValue(int i, int j) const {
+	int index = i * this->width + j;
+	return this->values[index];
+}
+
+float& SquareMatrix::getValue(int i, int j) {
+	int index = i * this->width + j;
+	return this->values[index];
 }
 
 template <typename F>
@@ -64,7 +70,7 @@ void SquareMatrix::applyComponentWiseOperation(F operation) {
 
 SquareMatrix SquareMatrix::operator-() const {
     // Matrix negation
-    auto negate = [&] (int i, int j) {return -values[i][j];};
+    auto negate = [&] (int i, int j) {return -this->getValue(i,j);};
     SquareMatrix m = SquareMatrix(*this);
     m.applyComponentWiseOperation(negate);
     return m;
@@ -73,7 +79,7 @@ SquareMatrix SquareMatrix::operator-() const {
 SquareMatrix& SquareMatrix::operator+=(const SquareMatrix& m) {
     // Matrix addition
     assert(dimensions() == m.dimensions());
-    auto add = [&] (int i, int j) {return values[i][j] + m(i,j);};
+    auto add = [&] (int i, int j) {return this->getValue(i, j) + m(i,j);};
     applyComponentWiseOperation(add);
     return *this;
 }
@@ -81,21 +87,21 @@ SquareMatrix& SquareMatrix::operator+=(const SquareMatrix& m) {
 SquareMatrix& SquareMatrix::operator-=(const SquareMatrix& m) {
     // Matrix subtraction
     assert(dimensions() == m.dimensions());
-    auto subtract = [&] (int i, int j) {return values[i][j] - m(i,j);};
+    auto subtract = [&] (int i, int j) {return this->getValue(i, j) - m(i,j);};
     applyComponentWiseOperation(subtract);
     return *this;
 }
 
 SquareMatrix& SquareMatrix::operator*=(float scalar) {
     // Multiplication by scalar
-    auto multiply = [&] (int i, int j) {return values[i][j] * scalar;};
+    auto multiply = [&] (int i, int j) {return this->getValue(i, j) * scalar;};
     applyComponentWiseOperation(multiply);
     return *this;
 }
 
 SquareMatrix& SquareMatrix::operator/=(float scalar) {
     // Division by scalar
-    auto divide = [&] (int i, int j) {return values[i][j] / scalar;};
+    auto divide = [&] (int i, int j) {return this->getValue(i, j) / scalar;};
     applyComponentWiseOperation(divide);
     return *this;
 }
@@ -120,7 +126,7 @@ Vector SquareMatrix::operator*(const Vector& v) const {
 
 SquareMatrix SquareMatrix::transpose() const {
     // Matrix transpose
-    auto transpose = [&] (int i, int j) {return values[j][i];};
+    auto transpose = [&] (int i, int j) {return this->getValue(j, i);};
     auto m = SquareMatrix(*this);
     m.applyComponentWiseOperation(transpose);
     return m;
@@ -137,7 +143,7 @@ SquareMatrix SquareMatrix::subMatrix(int i, int j) const {
             if(i != row && j != column) {
                 int newRowIndex = row > i ? row - 1 : row;
                 int newColumnIndex = column > j ? column - 1 : column;
-                m(newRowIndex,newColumnIndex) = values[row][column];
+                m(newRowIndex,newColumnIndex) = this->getValue(row, column);
             }
         }
     }
@@ -147,11 +153,11 @@ SquareMatrix SquareMatrix::subMatrix(int i, int j) const {
 float SquareMatrix::pureDeterminant() const {
     // Matrix determinant without using cofactor matrix
     if(dimensions() == 1) {
-        return values[0][0];
+        return this->getValue(0,0);
     } else {
         float result = 0;
         for (int j = 0; j < dimensions(); ++j) {
-            result += pow(-1,j+2) * subMatrix(0, j).pureDeterminant() * values[0][j];
+            result += pow(-1,j+2) * subMatrix(0, j).pureDeterminant() * this->getValue(0,j);
         }
         return result;
     }
@@ -178,14 +184,14 @@ void SquareMatrix::computeCofactorMatrix() const {
 float SquareMatrix::determinant() const {
     // Matrix determinant
     if(dimensions() == 1) {
-        return values[0][0];
+        return this->getValue(0, 0);
     } else {
         // First compute the cofactor matrix
         computeCofactorMatrix();
         // Use the cofactor matrix to compute the determinant
         float result = 0;
         for (int j = 0; j < dimensions(); ++j) {
-            result += (*cofactors)(j,0) * values[0][j];
+            result += (*cofactors)(j,0) * this->getValue(0, j);
         }
         return result;
     }
@@ -202,30 +208,34 @@ SquareMatrix SquareMatrix::inverse() const {
 
 int SquareMatrix::dimensions() const {
     // Get number of dimensions of matrix
-    return (int)values.size();
+    return width;
 }
 
 Vector SquareMatrix::column(int index) const {
     // Get a column as vector
     Vector v = Vector(dimensions());
     for (int row = 0; row < dimensions(); ++row) {
-        v[row] = values[row][index];
+        v[row] = this->getValue(row, index);
     }
     return v;
 }
 
 Vector SquareMatrix::row(int index) const {
     // Get a row as vector
-    return Vector(values[index]);
+	Vector v = Vector(dimensions());
+	for (int col = 0; col < dimensions(); ++col) {
+		v[col] = this->getValue(index, col);
+	}
+	return v;
 }
 
 float& SquareMatrix::operator()(int row, int column) {
     // Element access
     cofactorsAreStale = true;
-    return values[row][column];
+    return this->getValue(row, column); // calls non-const
 }
 
 float SquareMatrix::operator()(int row, int column) const {
     // Element access
-    return values[row][column];
+    return this->getValue(row, column); // calls const
 }
