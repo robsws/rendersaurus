@@ -117,8 +117,11 @@
     <ClCompile Include="src\triangle2d.cpp" />
     <ClCompile Include="src\triangle3d.cpp" />
     <ClCompile Include="src\vector.cpp" />
+    <ClCompile Include="src\worker_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\worker_pool.h" />
+    <ClInclude Include="worker_pool.h" />
     <ClInclude Include="include\basic_shader.h" />
     <ClInclude Include="include\camera.h" />
     <ClInclude Include="include\colour.h" />

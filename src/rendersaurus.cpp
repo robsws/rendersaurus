@@ -36,10 +36,10 @@ int Rendersaurus::refresh() {
     auto start = std::chrono::high_resolution_clock::now();
     shaderPtr->setCameraTransform(camera.getCameraSpaceTransform());
     // Regenerate the fragments
-    std::vector<Fragment> fragments = scene.render();
+    scene.render();
     // Update the display
     this->displayPtr->clear();
-    this->displayPtr->blend(fragments);
+    this->displayPtr->blend(shaderPtr->getAllGeneratedFragments());
     this->displayPtr->refresh();
     auto stop = std::chrono::high_resolution_clock::now();
     // Calculate FPS

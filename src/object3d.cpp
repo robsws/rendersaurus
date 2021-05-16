@@ -3,6 +3,8 @@
 #include "vector.h"
 #include "shader.h"
 #include "triangle3d.h"
+#include "worker_pool.h"
+#include <future>
 
 Object3D::Object3D(Model model, Vector position, std::shared_ptr<Shader> shaderPtr) :
     model(model),
@@ -11,7 +13,7 @@ Object3D::Object3D(Model model, Vector position, std::shared_ptr<Shader> shaderP
     scaleVector = Vector(std::vector<float>{1,1,1});
 }
 
-std::vector<Fragment> Object3D::render() const {
+void Object3D::render() const {
     // Generate the fragments for this object.
     std::vector<Fragment> fragments;
     // Set the model transformation matrix in the shader.
@@ -25,13 +27,10 @@ std::vector<Fragment> Object3D::render() const {
         0,              0,              0,              1
     }));
     shaderPtr->setModelTransform(modelTransform);
-    // Pass each triangle in the model through the shader and add the fragments
-    // generated to the list.
-    for (Triangle3D triangle : model.getTriangles()) {
-        std::vector<Fragment> triangleFragments = shaderPtr->generateFragments(triangle);
-        fragments.insert(fragments.end(), triangleFragments.begin(), triangleFragments.end());
-    }
-    return fragments;
+    // Start tasks to generate fragments for each triangle
+	for (Triangle3D triangle : model.getTriangles()) {
+		shaderPtr->generateFragments(triangle);
+	}
 }
 
 void Object3D::translate(const Vector& v) {

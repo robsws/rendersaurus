@@ -16,8 +16,8 @@ class Object3D {
     // Construct an Object3D with a particular model in the given world space
     // position using the given shader for generating the fragments for the object.
     Object3D(Model model, Vector position, std::shared_ptr<Shader> shaderPtr);
-    // Generate the fragments for this object.
-    vector<Fragment> render() const;
+    // Tell the shader to generate the fragments for this object.
+    void render() const;
     // Translate the object by the given vector.
     void translate(const Vector& v);
     // Rotate the object by the given quaternion.

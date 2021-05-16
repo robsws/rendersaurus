@@ -5,6 +5,7 @@
 #include "coord.h"
 #include "fragment.h"
 #include "triangle3d.h"
+#include "worker_pool.h"
 #include <vector>
 
 class Shader {
@@ -13,8 +14,12 @@ class Shader {
         // vertices to window space.
         Shader(int windowWidth, int windowHeight);
         // Given a triangle from a model, transform the coordinates into clip space
-        // and then rasterize to produce a list of fragments.
-        std::vector<Fragment> generateFragments(const Triangle3D& triangle) const;
+        // and then rasterize to produce a list of fragments. Executed using internal
+		// thread pool.
+		void generateFragments(const Triangle3D& triangle);
+		// Wait for all remaining fragment generation tasks to complete
+		// and return the list of all fragments generated. Also clear the list.
+		std::vector<Fragment> getAllGeneratedFragments();
         // Set the model matrix to be used to transform vertices from object
         // space to world space.
         void setModelTransform(const SquareMatrix& modelTransform);
@@ -44,4 +49,16 @@ class Shader {
         int windowWidth;
         // Height of window used to transform vertices form clip space to window space
         int windowHeight;
+	private:
+		mutable WorkerPool workerPool;
+		// Actual work to generate fragments for a triangle
+		void generateFragmentsImpl(const Triangle3D& triangle);
+		// Store all the fragments generated across all operations
+		std::vector<Fragment> fragments;
+		// Thread safe function to save fragments to internal store
+		void recordFragments(const vector<Fragment>& fragments);
+		std::mutex fragmentsMutex;
+		// Keep track of task futures so we know when all are completed
+		std::vector<std::future<void>> generateFragmentsFutures;
+		std::mutex generateFragmentsFuturesMutex;
 };

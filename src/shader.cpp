@@ -48,9 +48,21 @@ namespace {
 
 Shader::Shader(int windowWidth, int windowHeight) :
     windowWidth(windowWidth),
-    windowHeight(windowHeight) {}
+    windowHeight(windowHeight),
+	workerPool(std::thread::hardware_concurrency() - 1){
+}
 
-vector<Fragment> Shader::generateFragments(const Triangle3D& triangle) const {
+void Shader::generateFragments(const Triangle3D& triangle) {
+	std::lock_guard<std::mutex> futureLock(this->generateFragmentsFuturesMutex);
+	std::future<void> taskFuture = this->workerPool.addTask(
+		[this, triangle]() {
+			this->generateFragmentsImpl(triangle);
+		}
+	);
+	this->generateFragmentsFutures.push_back(std::move(taskFuture));
+}
+
+void Shader::generateFragmentsImpl(const Triangle3D& triangle) {
     // Transform vertices of triangle to clip space.
     Vertex a = transformVertex(triangle.a);
     Vertex b = transformVertex(triangle.b);
@@ -72,7 +84,31 @@ vector<Fragment> Shader::generateFragments(const Triangle3D& triangle) const {
             fragments.push_back(computeFragmentColour(pixel, interpolatedAttributes));
         }
     }
-    return fragments;
+	this->recordFragments(fragments);
+}
+
+void Shader::recordFragments(const std::vector<Fragment>& fragments) {
+	std::lock_guard<std::mutex> lock(this->fragmentsMutex);
+	this->fragments.insert(this->fragments.end(), fragments.begin(), fragments.end());
+}
+
+vector<Fragment> Shader::getAllGeneratedFragments() {
+	// Make sure all generate tasks are completed
+	{
+		std::lock_guard<std::mutex> futureLock(this->generateFragmentsFuturesMutex);
+		for (auto& future : this->generateFragmentsFutures) {
+			future.get();
+		}
+		this->generateFragmentsFutures.clear();
+	}
+	// Return all fragments recorded and clear list
+	vector<Fragment> fullList;
+	{
+		std::lock_guard<std::mutex> lock(this->fragmentsMutex);
+		fullList = std::move(this->fragments);
+		this->fragments.clear();
+	}
+	return fullList;
 }
 
 void Shader::setModelTransform(const SquareMatrix& modelTransform) {
